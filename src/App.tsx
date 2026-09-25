@@ -4,6 +4,7 @@ import Canvas from './components/Canvas'
 
 function App() {
     const [lines, setLines] = useState<any>(null)
+    const [polygons, setPolygons] = useState<any>(null)
 
     const handleFileChange = async (e: any) => {
         const file = e.target.files[0]
@@ -12,14 +13,13 @@ function App() {
         const parser = new DxfParser()
 
         const drawing = parser.parseSync(fileData)
-        // console.log(drawing?.entities)
+        console.log(drawing)
 
-        const drawingEntities = drawing?.entities
+        // const drawingEntities = drawing?.entities
+        const lines = drawing?.blocks['Контуры'].entities
 
-        if (drawingEntities) {
-            // console.log(drawingEntities)
-
-            const linesCoordinates: any = drawingEntities.reduce(
+        if (lines) {
+            const linesCoordinates: any = lines.reduce(
                 (acc, currentEntity: any): any => {
                     if (currentEntity.type === 'LINE') {
                         const lineVertices = currentEntity.vertices.map(
@@ -33,12 +33,40 @@ function App() {
                             })
                         )
                         return [...acc, lineVertices]
+                    } else {
+                        return acc
                     }
                 },
                 []
             )
-            // console.log(linesCoordinates)
+
             setLines(linesCoordinates)
+
+            const polygons = drawing?.entities
+            // console.log('polygons:')
+            // console.log(polygons)
+
+            if (polygons) {
+                const polygonsCoordinates: any = polygons.reduce(
+                    (acc, currentEntity: any): any => {
+                        if (currentEntity.type === 'LWPOLYLINE') {
+                            const polygonVertices = currentEntity.vertices.map(
+                                (vertices: { x: number; y: number }) => ({
+                                    x: vertices.x,
+                                    y: vertices.y,
+                                })
+                            )
+                            return [...acc, polygonVertices]
+                        } else {
+                            return acc
+                        }
+                    },
+                    []
+                )
+                // console.log('polygons coordinates:')
+                // console.log(polygonsCoordinates)
+                setPolygons(polygonsCoordinates)
+            }
         }
 
         try {
@@ -54,7 +82,7 @@ function App() {
                 <input type="file" onChange={handleFileChange} />
             </div>
             <div>
-                <Canvas lines={lines} />
+                <Canvas lines={lines} polygons={polygons} />
             </div>
         </>
     )

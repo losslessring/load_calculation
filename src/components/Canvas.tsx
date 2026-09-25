@@ -2,7 +2,13 @@ import { useEffect, useRef } from 'react'
 import type { LineCoordinates } from '../interfaces/LineCoordinates'
 import type { VertexCoordinates } from '../interfaces/VertexCoordinates'
 
-export default function Canvas({ lines }: { lines: VertexCoordinates[][] }) {
+export default function Canvas({
+    lines,
+    polygons,
+}: {
+    lines: VertexCoordinates[][]
+    polygons: VertexCoordinates[][]
+}) {
     const ref = useRef(null)
 
     const draw = (ctx: any) => {
@@ -22,6 +28,24 @@ export default function Canvas({ lines }: { lines: VertexCoordinates[][] }) {
         ctx.stroke() // Render the path
     }
 
+    const drawPolygon = (
+        ctx: any,
+        coordinates: VertexCoordinates[],
+        fillColor: string
+    ) => {
+        // ctx.fillStyle = '#f00'
+        ctx.fillStyle = fillColor
+        ctx.beginPath()
+        ctx.moveTo(coordinates[0].x, coordinates[0].y)
+        //Draw lines from the second point in coordinates array
+
+        ctx.lineTo(100, 50)
+        ctx.lineTo(50, 100)
+        ctx.lineTo(0, 90)
+        ctx.closePath()
+        ctx.fill()
+    }
+
     useEffect(() => {
         const canvas = ref.current
         // @ts-ignore
@@ -39,7 +63,10 @@ export default function Canvas({ lines }: { lines: VertexCoordinates[][] }) {
                 endY: line[1].y / scaleFactor - shift,
             })
         })
+        console.log('lines')
         console.log(lines)
+        console.log('polygons')
+        console.log(polygons)
     }, [lines])
     return (
         <canvas
