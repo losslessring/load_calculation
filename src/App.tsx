@@ -1,6 +1,8 @@
 import { DxfParser } from 'dxf-parser'
 import { useState } from 'react'
 import Canvas from './components/Canvas'
+import { linesTest } from './utils/geometry/lines'
+import { polygonsTest } from './utils/geometry/polygons'
 
 function App() {
     const [lines, setLines] = useState<any>(null)
@@ -82,7 +84,7 @@ function App() {
                 <input type="file" onChange={handleFileChange} />
             </div>
             <div>
-                <Canvas lines={lines} polygons={polygons} />
+                <Canvas lines={linesTest} polygons={polygonsTest} />
             </div>
         </>
     )

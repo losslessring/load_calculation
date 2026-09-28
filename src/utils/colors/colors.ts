@@ -1,0 +1,18 @@
+export const colors = [
+    'tomato',
+    'orange',
+    'indigo',
+    'violet',
+    'maroon',
+    'red',
+    'purple',
+    'fuchsia',
+    'green',
+    'lime',
+    'olive',
+    'yellow',
+    'navy',
+    'blue',
+    'teal',
+    'aqua',
+]
