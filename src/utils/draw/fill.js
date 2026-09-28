@@ -1,4 +1,4 @@
-export const scanlinePoly = (ctx, lines, col) => {
+export const scanlinePoly = (ctx, lines, coloredLines, col) => {
     const b = lines.getBounds()
     lines.forEach((line) => console.log(line))
 
@@ -20,7 +20,7 @@ export const scanlinePoly = (ctx, lines, col) => {
                     const xS = Math.floor(nx1)
                     const xE = Math.floor(nx2)
                     for (xx = xS; xx < xE; xx++) {
-                        const closestLine = lines.reduce(
+                        const closestLine = coloredLines.reduce(
                             (accumulator, currentLine) => {
                                 const currentDistance = pDistance(
                                     xx,

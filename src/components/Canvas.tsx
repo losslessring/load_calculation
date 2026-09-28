@@ -23,7 +23,19 @@ export default function Canvas({
         const scaleFactor = 25
         const shiftY = 500
 
-        lines?.forEach((line: VertexCoordinates[], index) => {
+        const coloredLines = lines?.map((line, index) => ({
+            p1: {
+                x: line[0].x / scaleFactor,
+                y: line[0].y / scaleFactor - shiftY,
+            },
+            p2: {
+                x: line[1].x / scaleFactor,
+                y: line[1].y / scaleFactor - shiftY,
+            },
+            color: colors[index],
+        }))
+
+        lines.forEach((line: any, index) => {
             drawSegment(
                 ctx,
                 {
@@ -48,6 +60,8 @@ export default function Canvas({
         })
         console.log('lines')
         console.log(lines)
+        console.log('colored lines')
+        console.log(coloredLines)
         console.log('polygons')
         console.log(polygons)
 
@@ -77,7 +91,7 @@ export default function Canvas({
         const polygonToFill = [
             {
                 x: 0 / scaleFactor,
-                y: 9500 / scaleFactor - shiftY / scaleFactor - shiftY,
+                y: 9500 / scaleFactor - shiftY,
             },
             {
                 x: 3000 / scaleFactor,
@@ -91,11 +105,29 @@ export default function Canvas({
                 x: 0 / scaleFactor,
                 y: 0 / scaleFactor - shiftY,
             },
-            {
-                x: 0 / scaleFactor,
-                y: 9500 / scaleFactor - shiftY,
-            },
-        ]
+        ].map((point, index, array) => {
+            if (index < array.length - 1) {
+                return {
+                    p1: { x: array[index].x, y: array[index].y },
+                    p2: { x: array[index + 1].x, y: array[index + 1].y },
+                    slope:
+                        (array[index + 1].x - array[index].x) /
+                        (array[index + 1].y - array[index].y),
+                    color: colors[index],
+                }
+            } else {
+                return {
+                    p1: { x: array[index].x, y: array[index].y },
+                    p2: { x: array[0].x, y: array[0].y },
+                    slope:
+                        (array[0].x - array[index].x) /
+                        (array[0].y - array[index].y),
+                    color: colors[index],
+                }
+            }
+        })
+        console.log('polygons to fill')
+        console.log(polygonToFill)
         const fillLines = createLines([])
         console.log('fill lines')
 
@@ -106,60 +138,64 @@ export default function Canvas({
             slope: (p2.x - p1.x) / (p2.y - p1.y),
         })
 
-        fillLines.addLine({
-            ...L2(
-                {
-                    x: 0 / scaleFactor,
-                    y: 9500 / scaleFactor - shiftY,
-                },
-                {
-                    x: 3000 / scaleFactor,
-                    y: 9500 / scaleFactor - shiftY,
-                }
-            ),
-            color: 'red',
+        polygonToFill.forEach((line) => {
+            fillLines.addLine(line)
         })
-        fillLines.addLine({
-            ...L2(
-                {
-                    x: 3000 / scaleFactor,
-                    y: 9500 / scaleFactor - shiftY,
-                },
-                {
-                    x: 3000 / scaleFactor,
-                    y: 0 / scaleFactor - shiftY,
-                }
-            ),
-            color: 'green',
-        })
-        fillLines.addLine({
-            ...L2(
-                {
-                    x: 3000 / scaleFactor,
-                    y: 0 / scaleFactor - shiftY,
-                },
-                {
-                    x: 0 / scaleFactor,
-                    y: 0 / scaleFactor - shiftY,
-                }
-            ),
-            color: 'blue',
-        })
-        fillLines.addLine({
-            ...L2(
-                {
-                    x: 0 / scaleFactor,
-                    y: 0 / scaleFactor - shiftY,
-                },
-                {
-                    x: 0 / scaleFactor,
-                    y: 9500 / scaleFactor - shiftY,
-                }
-            ),
-            color: 'yellow',
-        })
+
+        // fillLines.addLine({
+        //     ...L2(
+        //         {
+        //             x: 0 / scaleFactor,
+        //             y: 9500 / scaleFactor - shiftY,
+        //         },
+        //         {
+        //             x: 3000 / scaleFactor,
+        //             y: 9500 / scaleFactor - shiftY,
+        //         }
+        //     ),
+        //     color: 'red',
+        // })
+        // fillLines.addLine({
+        //     ...L2(
+        //         {
+        //             x: 3000 / scaleFactor,
+        //             y: 9500 / scaleFactor - shiftY,
+        //         },
+        //         {
+        //             x: 3000 / scaleFactor,
+        //             y: 0 / scaleFactor - shiftY,
+        //         }
+        //     ),
+        //     color: 'green',
+        // })
+        // fillLines.addLine({
+        //     ...L2(
+        //         {
+        //             x: 3000 / scaleFactor,
+        //             y: 0 / scaleFactor - shiftY,
+        //         },
+        //         {
+        //             x: 0 / scaleFactor,
+        //             y: 0 / scaleFactor - shiftY,
+        //         }
+        //     ),
+        //     color: 'blue',
+        // })
+        // fillLines.addLine({
+        //     ...L2(
+        //         {
+        //             x: 0 / scaleFactor,
+        //             y: 0 / scaleFactor - shiftY,
+        //         },
+        //         {
+        //             x: 0 / scaleFactor,
+        //             y: 9500 / scaleFactor - shiftY,
+        //         }
+        //     ),
+        //     color: 'yellow',
+        // })
         console.log(fillLines)
-        scanlinePoly(ctx, fillLines, '#F00')
+        scanlinePoly(ctx, fillLines, coloredLines, '#F00')
     }, [lines])
     return (
         <canvas
