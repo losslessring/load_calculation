@@ -43,6 +43,7 @@ export const scanlinePoly = (ctx, lines, coloredLines, alpha) => {
                         )
                         // console.log(closestLine.color)
                         ctx.fillStyle = closestLine.color
+
                         ctx.fillRect(xx, y, 1, 1)
                     }
                     x = nx2

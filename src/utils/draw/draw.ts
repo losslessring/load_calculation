@@ -59,3 +59,44 @@ export const drawPolygon = (
     ctx.closePath()
     ctx.fill()
 }
+
+export function drawLines({
+    ctx,
+    lines,
+    scaleFactor,
+    shiftX,
+    shiftY,
+    pointSize,
+    colors,
+}: {
+    ctx: CanvasRenderingContext2D
+    lines: VertexCoordinates[][]
+    scaleFactor: number
+    shiftX: number
+    shiftY: number
+    pointSize: number
+    colors: string[]
+}) {
+    lines.forEach((line: any, index) => {
+        drawSegment(
+            ctx,
+            {
+                startX: line[0].x / scaleFactor - shiftX,
+                startY: line[0].y / scaleFactor - shiftY,
+                endX: line[1].x / scaleFactor - shiftX,
+                endY: line[1].y / scaleFactor - shiftY,
+            },
+            colors[index],
+            4
+        )
+        // const pointSize = 8
+        const pointSizeShift = pointSize / 2
+        const startPointX = line[0].x / scaleFactor - pointSizeShift
+        const startPointY = line[0].y / scaleFactor - shiftY - pointSizeShift
+        const endPointX = line[1].x / scaleFactor - pointSizeShift
+        const endPointY = line[1].y / scaleFactor - shiftY - pointSizeShift
+
+        drawPoint(ctx, startPointX, startPointY, colors[index], pointSize)
+        drawPoint(ctx, endPointX, endPointY, colors[index], pointSize)
+    })
+}

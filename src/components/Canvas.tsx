@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react'
 import type { VertexCoordinates } from '../interfaces/VertexCoordinates'
 import { colors } from '../utils/colors/colors'
-import { drawPoint, drawSegment } from '../utils/draw/draw'
-import { createLines, scanlinePoly } from '../utils/draw/fill.js'
+import { drawLines, drawPoint } from '../utils/draw/draw'
+import { fillPolygons } from '../utils/draw/fillPolygons.js'
+import { splitLine } from '../utils/geometry/geometry.js'
 
 export default function Canvas({
     lines,
@@ -36,29 +37,16 @@ export default function Canvas({
             color: colors[index],
         }))
 
-        lines.forEach((line: any, index) => {
-            drawSegment(
-                ctx,
-                {
-                    startX: line[0].x / scaleFactor,
-                    startY: line[0].y / scaleFactor - shiftY,
-                    endX: line[1].x / scaleFactor,
-                    endY: line[1].y / scaleFactor - shiftY,
-                },
-                colors[index],
-                4
-            )
-            const pointSize = 8
-            const pointSizeShift = pointSize / 2
-            const startPointX = line[0].x / scaleFactor - pointSizeShift
-            const startPointY =
-                line[0].y / scaleFactor - shiftY - pointSizeShift
-            const endPointX = line[1].x / scaleFactor - pointSizeShift
-            const endPointY = line[1].y / scaleFactor - shiftY - pointSizeShift
-
-            drawPoint(ctx, startPointX, startPointY, colors[index], pointSize)
-            drawPoint(ctx, endPointX, endPointY, colors[index], pointSize)
+        drawLines({
+            ctx,
+            lines,
+            scaleFactor,
+            shiftX,
+            shiftY,
+            pointSize: 8,
+            colors,
         })
+
         console.log('lines')
         console.log(lines)
         console.log('colored lines')
@@ -66,96 +54,44 @@ export default function Canvas({
         console.log('polygons')
         console.log(polygons)
 
-        // const polygonToFill = [
-        //     {
-        //         x: 0,
-        //         y: 9500,
-        //     },
-        //     {
-        //         x: 3000,
-        //         y: 9500,
-        //     },
-        //     {
-        //         x: 3000,
-        //         y: 0,
-        //     },
-        //     {
-        //         x: 0,
-        //         y: 0,
-        //     },
-        //     {
-        //         x: 0,
-        //         y: 9500,
-        //     },
-        // ]
+        lines.forEach
 
-        polygons.forEach((polygon) => {
-            // const polygonToFill =
-            // [
-            //     {
-            //         x: 0,
-            //         y: 9500,
-            //     },
-            //     {
-            //         x: 3000,
-            //         y: 9500,
-            //     },
-            //     {
-            //         x: 3000,
-            //         y: 0,
-            //     },
-            //     {
-            //         x: 0,
-            //         y: 0,
-            //     },
-            // ]
-
-            const polygonToFill = polygon
-                .map((point) => ({
-                    x: point.x / scaleFactor,
-                    y: point.y / scaleFactor - shiftY,
-                }))
-                .map((point, index, array) => {
-                    if (index < array.length - 1) {
-                        return {
-                            p1: { x: array[index].x, y: array[index].y },
-                            p2: {
-                                x: array[index + 1].x,
-                                y: array[index + 1].y,
-                            },
-                            slope:
-                                (array[index + 1].x - array[index].x) /
-                                (array[index + 1].y - array[index].y),
-                        }
-                    } else {
-                        return {
-                            p1: { x: array[index].x, y: array[index].y },
-                            p2: { x: array[0].x, y: array[0].y },
-                            slope:
-                                (array[0].x - array[index].x) /
-                                (array[0].y - array[index].y),
-                        }
-                    }
-                })
-
-            console.log('polygons to fill')
-            console.log(polygonToFill)
-            const fillLines = createLines([])
-            console.log('fill lines')
-
-            // const P2 = (x = 0, y = 0) => ({ x, y })
-            const L2 = (p1: VertexCoordinates, p2: VertexCoordinates) => ({
-                p1,
-                p2,
-                slope: (p2.x - p1.x) / (p2.y - p1.y),
+        lines.forEach((line: any, index) => {
+            const lineSegmentPoints = splitLine({
+                start: line[0],
+                end: line[1],
+                // segments: 4,
+                segmentLength: 600,
             })
+            console.log('line segment points')
+            console.log(lineSegmentPoints)
 
-            polygonToFill.forEach((line) => {
-                fillLines.addLine(line)
+            const pointSize = 8
+            const pointSizeShift = pointSize / 2
+
+            lineSegmentPoints?.forEach((point) => {
+                const startPointX = point.x / scaleFactor - pointSizeShift
+                const startPointY =
+                    point.y / scaleFactor - shiftY - pointSizeShift
+
+                drawPoint(
+                    ctx,
+                    startPointX,
+                    startPointY,
+                    colors[index],
+                    pointSize
+                )
             })
+        })
 
-            console.log(fillLines)
-            scanlinePoly(ctx, fillLines, coloredLines, 0.75)
+        fillPolygons({
+            ctx,
+            polygons,
+            scaleFactor,
+            shiftX,
+            shiftY,
+            coloredLines,
+            alpha: 0.75,
         })
     }, [lines])
     return (
