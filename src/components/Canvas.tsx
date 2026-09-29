@@ -21,6 +21,7 @@ export default function Canvas({
         ctx.scale(1, -1)
 
         const scaleFactor = 25
+        const shiftX = 0
         const shiftY = 500
 
         const coloredLines = lines?.map((line, index) => ({
@@ -88,114 +89,74 @@ export default function Canvas({
         //     },
         // ]
 
-        const polygonToFill = [
-            {
-                x: 0 / scaleFactor,
-                y: 9500 / scaleFactor - shiftY,
-            },
-            {
-                x: 3000 / scaleFactor,
-                y: 9500 / scaleFactor - shiftY,
-            },
-            {
-                x: 3000 / scaleFactor,
-                y: 0 / scaleFactor - shiftY,
-            },
-            {
-                x: 0 / scaleFactor,
-                y: 0 / scaleFactor - shiftY,
-            },
-        ].map((point, index, array) => {
-            if (index < array.length - 1) {
-                return {
-                    p1: { x: array[index].x, y: array[index].y },
-                    p2: { x: array[index + 1].x, y: array[index + 1].y },
-                    slope:
-                        (array[index + 1].x - array[index].x) /
-                        (array[index + 1].y - array[index].y),
-                    color: colors[index],
-                }
-            } else {
-                return {
-                    p1: { x: array[index].x, y: array[index].y },
-                    p2: { x: array[0].x, y: array[0].y },
-                    slope:
-                        (array[0].x - array[index].x) /
-                        (array[0].y - array[index].y),
-                    color: colors[index],
-                }
-            }
-        })
-        console.log('polygons to fill')
-        console.log(polygonToFill)
-        const fillLines = createLines([])
-        console.log('fill lines')
+        polygons.forEach((polygon) => {
+            // const polygonToFill =
+            // [
+            //     {
+            //         x: 0,
+            //         y: 9500,
+            //     },
+            //     {
+            //         x: 3000,
+            //         y: 9500,
+            //     },
+            //     {
+            //         x: 3000,
+            //         y: 0,
+            //     },
+            //     {
+            //         x: 0,
+            //         y: 0,
+            //     },
+            // ]
 
-        const P2 = (x = 0, y = 0) => ({ x, y })
-        const L2 = (p1 = P2(), p2 = P2()) => ({
-            p1,
-            p2,
-            slope: (p2.x - p1.x) / (p2.y - p1.y),
-        })
+            const polygonToFill = polygon
+                .map((point) => ({
+                    x: point.x / scaleFactor,
+                    y: point.y / scaleFactor - shiftY,
+                }))
+                .map((point, index, array) => {
+                    if (index < array.length - 1) {
+                        return {
+                            p1: { x: array[index].x, y: array[index].y },
+                            p2: {
+                                x: array[index + 1].x,
+                                y: array[index + 1].y,
+                            },
+                            slope:
+                                (array[index + 1].x - array[index].x) /
+                                (array[index + 1].y - array[index].y),
+                        }
+                    } else {
+                        return {
+                            p1: { x: array[index].x, y: array[index].y },
+                            p2: { x: array[0].x, y: array[0].y },
+                            slope:
+                                (array[0].x - array[index].x) /
+                                (array[0].y - array[index].y),
+                        }
+                    }
+                })
 
-        polygonToFill.forEach((line) => {
-            fillLines.addLine(line)
-        })
+            console.log('polygons to fill')
+            console.log(polygonToFill)
+            const fillLines = createLines([])
+            console.log('fill lines')
 
-        // fillLines.addLine({
-        //     ...L2(
-        //         {
-        //             x: 0 / scaleFactor,
-        //             y: 9500 / scaleFactor - shiftY,
-        //         },
-        //         {
-        //             x: 3000 / scaleFactor,
-        //             y: 9500 / scaleFactor - shiftY,
-        //         }
-        //     ),
-        //     color: 'red',
-        // })
-        // fillLines.addLine({
-        //     ...L2(
-        //         {
-        //             x: 3000 / scaleFactor,
-        //             y: 9500 / scaleFactor - shiftY,
-        //         },
-        //         {
-        //             x: 3000 / scaleFactor,
-        //             y: 0 / scaleFactor - shiftY,
-        //         }
-        //     ),
-        //     color: 'green',
-        // })
-        // fillLines.addLine({
-        //     ...L2(
-        //         {
-        //             x: 3000 / scaleFactor,
-        //             y: 0 / scaleFactor - shiftY,
-        //         },
-        //         {
-        //             x: 0 / scaleFactor,
-        //             y: 0 / scaleFactor - shiftY,
-        //         }
-        //     ),
-        //     color: 'blue',
-        // })
-        // fillLines.addLine({
-        //     ...L2(
-        //         {
-        //             x: 0 / scaleFactor,
-        //             y: 0 / scaleFactor - shiftY,
-        //         },
-        //         {
-        //             x: 0 / scaleFactor,
-        //             y: 9500 / scaleFactor - shiftY,
-        //         }
-        //     ),
-        //     color: 'yellow',
-        // })
-        console.log(fillLines)
-        scanlinePoly(ctx, fillLines, coloredLines, '#F00')
+            // const P2 = (x = 0, y = 0) => ({ x, y })
+            const L2 = (p1: VertexCoordinates, p2: VertexCoordinates) => ({
+                p1,
+                p2,
+                slope: (p2.x - p1.x) / (p2.y - p1.y),
+            })
+
+            polygonToFill.forEach((line) => {
+                fillLines.addLine(line)
+            })
+
+            console.log(fillLines)
+            scanlinePoly(ctx, fillLines, coloredLines, 0.75)
+        })
     }, [lines])
     return (
         <canvas

@@ -1,9 +1,11 @@
-export const scanlinePoly = (ctx, lines, coloredLines, col) => {
+export const scanlinePoly = (ctx, lines, coloredLines, alpha) => {
     const b = lines.getBounds()
     lines.forEach((line) => console.log(line))
 
     var x, y, xx
     // ctx.fillStyle = col
+    ctx.save()
+    ctx.globalAlpha = alpha
     b.left = Math.floor(b.left)
     b.top = Math.floor(b.top)
     for (y = b.top; y <= b.bottom; y++) {
@@ -52,6 +54,7 @@ export const scanlinePoly = (ctx, lines, coloredLines, col) => {
             }
         }
     }
+    ctx.restore()
 }
 
 const atLineLevelY = (y, l) =>
