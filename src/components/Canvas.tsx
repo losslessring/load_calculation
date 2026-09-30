@@ -1,9 +1,8 @@
 import { useEffect, useRef } from 'react'
 import type { VertexCoordinates } from '../interfaces/VertexCoordinates'
 import { colors } from '../utils/colors/colors'
-import { drawLines, drawPoint } from '../utils/draw/draw'
+import { drawLines, drawPointsOnSegments } from '../utils/draw/draw'
 import { fillPolygons } from '../utils/draw/fillPolygons.js'
-import { splitLine } from '../utils/geometry/geometry.js'
 
 export default function Canvas({
     lines,
@@ -54,34 +53,16 @@ export default function Canvas({
         console.log('polygons')
         console.log(polygons)
 
-        lines.forEach
-
-        lines.forEach((line: any, index) => {
-            const lineSegmentPoints = splitLine({
-                start: line[0],
-                end: line[1],
-                // segments: 4,
-                segmentLength: 600,
-            })
-            console.log('line segment points')
-            console.log(lineSegmentPoints)
-
-            const pointSize = 8
-            const pointSizeShift = pointSize / 2
-
-            lineSegmentPoints?.forEach((point) => {
-                const startPointX = point.x / scaleFactor - pointSizeShift
-                const startPointY =
-                    point.y / scaleFactor - shiftY - pointSizeShift
-
-                drawPoint(
-                    ctx,
-                    startPointX,
-                    startPointY,
-                    colors[index],
-                    pointSize
-                )
-            })
+        drawPointsOnSegments({
+            ctx,
+            lines,
+            scaleFactor,
+            shiftX,
+            shiftY,
+            pointSize: 8,
+            segments: undefined,
+            segmentLength: 600,
+            colors,
         })
 
         fillPolygons({

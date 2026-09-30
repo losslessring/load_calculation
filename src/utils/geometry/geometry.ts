@@ -4,7 +4,7 @@ export function splitLine({
     start,
     end,
     segments,
-    segmentLength = undefined,
+    segmentLength,
 }: {
     start: VertexCoordinates
     end: VertexCoordinates

@@ -1,5 +1,6 @@
 import type { LineCoordinates } from '../../interfaces/LineCoordinates'
 import type { VertexCoordinates } from '../../interfaces/VertexCoordinates'
+import { splitLine } from '../geometry/geometry'
 
 export const draw = (ctx: CanvasRenderingContext2D) => {
     ctx.fillStyle = '#000000'
@@ -98,5 +99,47 @@ export function drawLines({
 
         drawPoint(ctx, startPointX, startPointY, colors[index], pointSize)
         drawPoint(ctx, endPointX, endPointY, colors[index], pointSize)
+    })
+}
+
+export function drawPointsOnSegments({
+    ctx,
+    lines,
+    scaleFactor,
+    shiftX,
+    shiftY,
+    pointSize = 8,
+    segments,
+    segmentLength,
+    colors,
+}: {
+    ctx: CanvasRenderingContext2D
+    lines: VertexCoordinates[][]
+    scaleFactor: number
+    shiftX: number
+    shiftY: number
+    pointSize?: number
+    segments?: number
+    segmentLength?: number
+    colors: string[]
+}) {
+    lines.forEach((line: any, index) => {
+        const lineSegmentPoints = splitLine({
+            start: line[0],
+            end: line[1],
+            segments,
+            segmentLength,
+        })
+        console.log('line segment points')
+        console.log(lineSegmentPoints)
+
+        const pointSizeShift = pointSize / 2
+
+        lineSegmentPoints?.forEach((point) => {
+            const startPointX = point.x / scaleFactor - shiftX - pointSizeShift
+            const startPointY = point.y / scaleFactor - shiftY - pointSizeShift
+
+            drawPoint(ctx, startPointX, startPointY, colors[index], pointSize)
+        })
     })
 }
