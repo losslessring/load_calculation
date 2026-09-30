@@ -64,17 +64,13 @@ export const drawPolygon = (
 export function drawLines({
     ctx,
     lines,
-    scaleFactor,
-    shiftX,
-    shiftY,
+
     pointSize,
     colors,
 }: {
     ctx: CanvasRenderingContext2D
     lines: VertexCoordinates[][]
-    scaleFactor: number
-    shiftX: number
-    shiftY: number
+
     pointSize: number
     colors: string[]
 }) {
@@ -82,20 +78,20 @@ export function drawLines({
         drawSegment(
             ctx,
             {
-                startX: line[0].x / scaleFactor - shiftX,
-                startY: line[0].y / scaleFactor - shiftY,
-                endX: line[1].x / scaleFactor - shiftX,
-                endY: line[1].y / scaleFactor - shiftY,
+                startX: line[0].x,
+                startY: line[0].y,
+                endX: line[1].x,
+                endY: line[1].y,
             },
             colors[index],
             4
         )
         // const pointSize = 8
         const pointSizeShift = pointSize / 2
-        const startPointX = line[0].x / scaleFactor - pointSizeShift
-        const startPointY = line[0].y / scaleFactor - shiftY - pointSizeShift
-        const endPointX = line[1].x / scaleFactor - pointSizeShift
-        const endPointY = line[1].y / scaleFactor - shiftY - pointSizeShift
+        const startPointX = line[0].x - pointSizeShift
+        const startPointY = line[0].y - pointSizeShift
+        const endPointX = line[1].x - pointSizeShift
+        const endPointY = line[1].y - pointSizeShift
 
         drawPoint(ctx, startPointX, startPointY, colors[index], pointSize)
         drawPoint(ctx, endPointX, endPointY, colors[index], pointSize)
@@ -105,9 +101,6 @@ export function drawLines({
 export function drawPointsOnSegments({
     ctx,
     lines,
-    scaleFactor,
-    shiftX,
-    shiftY,
     pointSize = 8,
     segments,
     segmentLength,
@@ -115,29 +108,26 @@ export function drawPointsOnSegments({
 }: {
     ctx: CanvasRenderingContext2D
     lines: VertexCoordinates[][]
-    scaleFactor: number
-    shiftX: number
-    shiftY: number
     pointSize?: number
     segments?: number
     segmentLength?: number
     colors: string[]
 }) {
-    lines.forEach((line: any, index) => {
+    lines.forEach((line: VertexCoordinates[], index) => {
         const lineSegmentPoints = splitLine({
             start: line[0],
             end: line[1],
             segments,
             segmentLength,
         })
-        console.log('line segment points')
-        console.log(lineSegmentPoints)
+        // console.log('line segment points')
+        // console.log(lineSegmentPoints)
 
         const pointSizeShift = pointSize / 2
 
-        lineSegmentPoints?.forEach((point) => {
-            const startPointX = point.x / scaleFactor - shiftX - pointSizeShift
-            const startPointY = point.y / scaleFactor - shiftY - pointSizeShift
+        lineSegmentPoints?.forEach((point: VertexCoordinates) => {
+            const startPointX = point.x - pointSizeShift
+            const startPointY = point.y - pointSizeShift
 
             drawPoint(ctx, startPointX, startPointY, colors[index], pointSize)
         })
