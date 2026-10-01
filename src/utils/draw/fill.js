@@ -1,6 +1,14 @@
-export const scanlinePoly = (ctx, lines, coloredLines, alpha) => {
+export const scanlinePoly = (
+    ctx,
+    lines,
+    coloredLines,
+    alpha,
+    calculatePixelColor
+) => {
     const b = lines.getBounds()
     lines.forEach((line) => console.log(line))
+
+    let pixelData = []
 
     var x, y, xx
     // ctx.fillStyle = col
@@ -22,27 +30,10 @@ export const scanlinePoly = (ctx, lines, coloredLines, alpha) => {
                     const xS = Math.floor(nx1)
                     const xE = Math.floor(nx2)
                     for (xx = xS; xx < xE; xx++) {
-                        const closestLine = coloredLines.reduce(
-                            (accumulator, currentLine) => {
-                                const currentDistance = pDistance(
-                                    xx,
-                                    y,
-                                    currentLine.p1.x,
-                                    currentLine.p1.y,
-                                    currentLine.p2.x,
-                                    currentLine.p2.y
-                                )
-                                return currentDistance < accumulator.distance
-                                    ? {
-                                          distance: currentDistance,
-                                          color: currentLine.color,
-                                      }
-                                    : accumulator
-                            },
-                            { distance: Infinity, color: 'black' }
-                        )
-                        // console.log(closestLine.color)
-                        ctx.fillStyle = closestLine.color
+                        const calculatedPixel = calculatePixelColor(xx, y)
+                        pixelData.push(calculatedPixel)
+                        ctx.fillStyle = calculatedPixel.color
+
                         ctx.fillRect(xx, y, 1, 1)
                     }
                     x = nx2
@@ -55,42 +46,12 @@ export const scanlinePoly = (ctx, lines, coloredLines, alpha) => {
         }
     }
     ctx.restore()
+    return pixelData
 }
 
 const atLineLevelY = (y, l) =>
     (l.p1.y < l.p2.y && y >= l.p1.y && y <= l.p2.y) ||
     (y >= l.p2.y && y <= l.p1.y)
-
-function pDistance(x, y, x1, y1, x2, y2) {
-    var A = x - x1
-    var B = y - y1
-    var C = x2 - x1
-    var D = y2 - y1
-
-    var dot = A * C + B * D
-    var len_sq = C * C + D * D
-    var param = -1
-    if (len_sq != 0)
-        //in case of 0 length line
-        param = dot / len_sq
-
-    var xx, yy
-
-    if (param < 0) {
-        xx = x1
-        yy = y1
-    } else if (param > 1) {
-        xx = x2
-        yy = y2
-    } else {
-        xx = x1 + param * C
-        yy = y1 + param * D
-    }
-
-    var dx = x - xx
-    var dy = y - yy
-    return Math.sqrt(dx * dx + dy * dy)
-}
 
 export function createLines(linesArray = []) {
     return Object.assign(linesArray, {

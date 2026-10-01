@@ -1,3 +1,4 @@
+import type { ColoredPoint } from '../../interfaces/ColoredPoint'
 import type { LineCoordinates } from '../../interfaces/LineCoordinates'
 import type { VertexCoordinates } from '../../interfaces/VertexCoordinates'
 import { splitLine } from '../geometry/geometry'
@@ -35,6 +36,88 @@ export const drawPoint = (
     ctx.save()
     ctx.fillStyle = color
     ctx.fillRect(x, y, size, size)
+    ctx.restore()
+}
+
+export function drawColoredPoints(
+    ctx: CanvasRenderingContext2D,
+    points: ColoredPoint[][],
+    pointSize: number = 4
+) {
+    ctx.save()
+    const pointSizeShift = pointSize / 2
+
+    points.forEach((line) => {
+        line.forEach((point) => {
+            ctx.fillStyle = point.color
+            ctx.fillRect(
+                point.x - pointSizeShift,
+                point.y - pointSizeShift,
+                pointSize,
+                pointSize
+            )
+        })
+    })
+
+    ctx.restore()
+}
+
+export function drawColoredPointsFlat(
+    ctx: CanvasRenderingContext2D,
+    points: ColoredPoint[],
+    pointSize: number = 4
+) {
+    ctx.save()
+    const pointSizeShift = pointSize / 2
+
+    points.forEach((point) => {
+        ctx.fillStyle = point.color
+        ctx.fillRect(
+            point.x - pointSizeShift,
+            point.y - pointSizeShift,
+            pointSize,
+            pointSize
+        )
+    })
+
+    ctx.restore()
+}
+
+export function drawPointIndexes(
+    ctx: CanvasRenderingContext2D,
+    points: ColoredPoint[],
+    xShift: number,
+    yShift: number
+) {
+    ctx.save()
+    // ctx.scale(1, -1)
+
+    // const pointSizeShift = pointSize / 2
+
+    // points.forEach((line) => {
+    points.forEach((point, index) => {
+        // ctx.fillStyle = point.color
+        // ctx.fillRect(
+        //     point.x - pointSizeShift,
+        //     point.y - pointSizeShift,
+        //     pointSize,
+        //     pointSize
+        // )
+
+        ctx.font = '10px sans-serif'
+        ctx.textAlign = 'left'
+        ctx.textBaseline = 'top'
+
+        // Optional: white outline for readability over busy backgrounds
+        // ctx.lineWidth = 3;
+        // ctx.strokeStyle = 'white';
+        // ctx.strokeText(text, px + offsetX, py + offsetY);
+
+        // ctx.fillStyle = 'black';
+        ctx.fillText(index.toString(), point.x + xShift, point.y + yShift)
+    })
+    // })
+
     ctx.restore()
 }
 
@@ -131,5 +214,19 @@ export function drawPointsOnSegments({
 
             drawPoint(ctx, startPointX, startPointY, colors[index], pointSize)
         })
+    })
+}
+
+export function heatmap(data: any) {
+    const min = Math.min(data)
+    const max = Math.max(data)
+
+    return data.map((value: any) => {
+        const intensity = (value - min) / (max - min || 1)
+
+        // Blue → Red
+        const hue = 240 - intensity * 240
+
+        return `hsl(${hue}, 100%, 50%)`
     })
 }

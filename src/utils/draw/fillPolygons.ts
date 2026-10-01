@@ -9,6 +9,7 @@ export function fillPolygons({
     shiftY,
     coloredLines,
     alpha,
+    calculatePixelColor,
 }: {
     ctx: CanvasRenderingContext2D
     polygons: VertexCoordinates[][]
@@ -17,8 +18,9 @@ export function fillPolygons({
     shiftY: number
     coloredLines: any
     alpha: number
+    calculatePixelColor: Function
 }) {
-    polygons.forEach((polygon) => {
+    const pixelData = polygons.map((polygon) => {
         const polygonToFill = polygon
             .map((point) => ({
                 x: point.x / scaleFactor - shiftX,
@@ -64,6 +66,14 @@ export function fillPolygons({
         })
 
         console.log(fillLines)
-        scanlinePoly(ctx, fillLines, coloredLines, alpha)
+        const polygonPixelData = scanlinePoly(
+            ctx,
+            fillLines,
+            coloredLines,
+            alpha,
+            calculatePixelColor
+        )
+        return polygonPixelData
     })
+    return pixelData
 }
