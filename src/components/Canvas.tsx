@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react'
+import type { PointValue } from '../interfaces/PointValue.js'
 import type { VertexCoordinates } from '../interfaces/VertexCoordinates'
 import { colors } from '../utils/colors/colors'
 import {
     drawColoredPointsFlat,
     drawLines,
     drawPointIndexes,
+    heatmap,
 } from '../utils/draw/draw'
 import { fillPolygons } from '../utils/draw/fillPolygons.js'
 import { distance, pDistance, splitLine } from '../utils/geometry/geometry.js'
@@ -79,7 +81,7 @@ export default function Canvas({
                     start: line[0],
                     end: line[1],
                     segments: undefined,
-                    segmentLength: 16,
+                    segmentLength: 8,
                 })
             })
             .map((line: any, index) => {
@@ -130,7 +132,7 @@ export default function Canvas({
         }
 
         const coloredPoints = lineSegmentPoints.flat()
-        drawColoredPointsFlat(ctx, coloredPoints, 8)
+        // drawColoredPointsFlat(ctx, coloredPoints, 8, 'color')
         drawPointIndexes(ctx, coloredPoints, 10, -20)
 
         console.log('colored points')
@@ -186,9 +188,27 @@ export default function Canvas({
         console.log('grouped pixel data')
         console.log(groupedPixelData)
 
-        const groupedPixelDataArray = Object.entries(groupedPixelData)
+        const groupedPixelDataArray = Object.entries(groupedPixelData).map(
+            (point) => ({ index: parseInt(point[0]), value: point[1] })
+        )
         console.log('grouped pixel data array')
         console.log(groupedPixelDataArray)
+
+        const heatmapPixelData = heatmap(groupedPixelDataArray as PointValue[])
+        console.log('heatmap pixel data')
+        console.log(heatmapPixelData)
+
+        const coloredPointsHeatmap = coloredPoints.map((point, index) => {
+            return {
+                ...point,
+                heatmap: heatmapPixelData.find(
+                    (pixelData) => pixelData.index === index
+                )?.heatmap,
+            }
+        })
+        console.log('colored points heatmap')
+        console.log(coloredPointsHeatmap)
+        drawColoredPointsFlat(ctx, coloredPointsHeatmap, 8, 'heatmap')
     }, [lines])
     return (
         <canvas

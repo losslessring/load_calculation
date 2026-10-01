@@ -1,5 +1,6 @@
 import type { ColoredPoint } from '../../interfaces/ColoredPoint'
 import type { LineCoordinates } from '../../interfaces/LineCoordinates'
+import type { PointValue } from '../../interfaces/PointValue'
 import type { VertexCoordinates } from '../../interfaces/VertexCoordinates'
 import { splitLine } from '../geometry/geometry'
 
@@ -64,14 +65,17 @@ export function drawColoredPoints(
 
 export function drawColoredPointsFlat(
     ctx: CanvasRenderingContext2D,
-    points: ColoredPoint[],
-    pointSize: number = 4
+    points: any[],
+    pointSize: number = 4,
+    colorProperty: string
 ) {
     ctx.save()
     const pointSizeShift = pointSize / 2
 
     points.forEach((point) => {
-        ctx.fillStyle = point.color
+        console.log(point[colorProperty])
+        //@ts-ignore
+        ctx.fillStyle = point[colorProperty]
         ctx.fillRect(
             point.x - pointSizeShift,
             point.y - pointSizeShift,
@@ -96,7 +100,7 @@ export function drawPointIndexes(
 
     // points.forEach((line) => {
     points.forEach((point, index) => {
-        // ctx.fillStyle = point.color
+        ctx.fillStyle = point.color
         // ctx.fillRect(
         //     point.x - pointSizeShift,
         //     point.y - pointSizeShift,
@@ -217,16 +221,16 @@ export function drawPointsOnSegments({
     })
 }
 
-export function heatmap(data: any) {
-    const min = Math.min(data)
-    const max = Math.max(data)
+export function heatmap(data: PointValue[]) {
+    const min = Math.min(...data.map((point) => point.value))
+    const max = Math.max(...data.map((point) => point.value))
 
-    return data.map((value: any) => {
-        const intensity = (value - min) / (max - min || 1)
+    return data.map((point: PointValue) => {
+        const intensity = (point.value - min) / (max - min || 1)
 
         // Blue → Red
-        const hue = 240 - intensity * 240
+        const hue = 220 - intensity * 220
 
-        return `hsl(${hue}, 100%, 50%)`
+        return { index: point.index, heatmap: `hsl(${hue}, 100%, 50%)` }
     })
 }
