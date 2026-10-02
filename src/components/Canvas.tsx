@@ -9,7 +9,7 @@ import {
     heatmap,
 } from '../utils/draw/draw'
 import { fillPolygons } from '../utils/draw/fillPolygons.js'
-import { distance, pDistance, splitLine } from '../utils/geometry/geometry.js'
+import { distance, splitLine } from '../utils/geometry/geometry.js'
 
 export default function Canvas({
     lines,
@@ -99,43 +99,30 @@ export default function Canvas({
         console.log('line segment points')
         console.log(lineSegmentPoints)
 
-        // drawPointsOnSegments({
-        //     ctx,
-        //     lines: transformedLines,
-        //     pointSize: 8,
-        //     segments: undefined,
-        //     segmentLength: 60,
-        //     colors,
-        // })
-
-        // drawColoredPoints(ctx, lineSegmentPoints, 8)
-
-        const calculatePixelColor = (x: number, y: number) => {
-            const closestLine = coloredLines.reduce(
-                (accumulator, currentLine) => {
-                    const currentDistance = pDistance(
-                        x,
-                        y,
-                        currentLine.p1.x,
-                        currentLine.p1.y,
-                        currentLine.p2.x,
-                        currentLine.p2.y
-                    )
-                    return currentDistance < accumulator.distance
-                        ? {
-                              distance: currentDistance,
-                              color: currentLine.color,
-                          }
-                        : accumulator
-                },
-                { distance: Infinity, color: 'black' }
-            )
-            return closestLine
-        }
+        // const calculatePixelColor = (x: number, y: number) => {
+        //     const closestLine = coloredLines.reduce(
+        //         (accumulator, currentLine) => {
+        //             const currentDistance = pDistance(
+        //                 x,
+        //                 y,
+        //                 currentLine.p1.x,
+        //                 currentLine.p1.y,
+        //                 currentLine.p2.x,
+        //                 currentLine.p2.y
+        //             )
+        //             return currentDistance < accumulator.distance
+        //                 ? {
+        //                       distance: currentDistance,
+        //                       color: currentLine.color,
+        //                   }
+        //                 : accumulator
+        //         },
+        //         { distance: Infinity, color: 'black' }
+        //     )
+        //     return closestLine
+        // }
 
         const coloredPoints = lineSegmentPoints.flat()
-        // drawColoredPointsFlat(ctx, coloredPoints, 8, 'color')
-        // drawPointIndexes(ctx, coloredPoints, 10, -20)
 
         console.log('colored points')
         console.log(coloredPoints)
@@ -165,12 +152,19 @@ export default function Canvas({
             return closestPoint
         }
 
+        const transformedPolygons = polygons.map((polygon) => {
+            return polygon.map((point) => ({
+                x: point.x / scaleFactor - shiftX,
+                y: point.y / scaleFactor - shiftY,
+            }))
+        })
+
+        console.log('transformed polygons')
+        console.log(transformedPolygons)
+
         const pixelData = fillPolygons({
             ctx,
-            polygons,
-            scaleFactor,
-            shiftX,
-            shiftY,
+            polygons: transformedPolygons,
             coloredLines,
             alpha: 0.75,
             // calculatePixelColor: calculatePixelColor,

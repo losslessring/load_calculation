@@ -81,3 +81,11 @@ export function distance(
 ): number {
     return Math.hypot(x2 - x1, y2 - y1)
 }
+
+export function slopeCalculation(p1: VertexCoordinates, p2: VertexCoordinates) {
+    return {
+        p1,
+        p2,
+        slope: (p2.x - p1.x) / (p2.y - p1.y),
+    }
+}
