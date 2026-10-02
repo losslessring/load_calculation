@@ -1,12 +1,12 @@
 import { DxfParser } from 'dxf-parser'
 import { useState } from 'react'
 import Canvas from './components/Canvas'
-import { linesTest } from './utils/geometry/lines'
-import { polygonsTest } from './utils/geometry/polygons'
 
 function App() {
     const [lines, setLines] = useState<any>(null)
     const [polygons, setPolygons] = useState<any>(null)
+    const [scaleFactor, setScaleFactor] = useState(20)
+    const [segmentLength, setSegmentLength] = useState(20)
 
     const handleFileChange = async (e: any) => {
         const file = e.target.files[0]
@@ -18,7 +18,8 @@ function App() {
         console.log(drawing)
 
         // const drawingEntities = drawing?.entities
-        const lines = drawing?.blocks['Контуры'].entities
+        //const lines = drawing?.blocks['Контуры'].entities
+        const lines = drawing?.entities
 
         if (lines) {
             const linesCoordinates: any = lines.reduce(
@@ -84,7 +85,51 @@ function App() {
                 <input type="file" onChange={handleFileChange} />
             </div>
             <div>
-                <Canvas lines={linesTest} polygons={polygonsTest} />
+                <input
+                    type="range"
+                    id="scale"
+                    name="scale"
+                    min={4}
+                    max={100}
+                    step={1}
+                    value={scaleFactor}
+                    onChange={(e) => setScaleFactor(Number(e.target.value))}
+                />
+                <label htmlFor="scale">Масштаб делить на </label>
+                <input
+                    type="number"
+                    min={4}
+                    value={scaleFactor}
+                    onChange={(e) => setScaleFactor(Number(e.target.value))}
+                />
+            </div>
+            <div>
+                <input
+                    type="range"
+                    id="segment_length"
+                    name="segment_length"
+                    min={1}
+                    max={100}
+                    step={1}
+                    value={segmentLength}
+                    onChange={(e) => setSegmentLength(Number(e.target.value))}
+                />
+                <label htmlFor="segment_length">Длина сегмента </label>
+                <input
+                    type="number"
+                    min={1}
+                    value={segmentLength}
+                    onChange={(e) => setSegmentLength(Number(e.target.value))}
+                />
+            </div>
+            <div>
+                {/* <Canvas lines={linesTest} polygons={polygonsTest} /> */}
+                <Canvas
+                    lines={lines}
+                    polygons={polygons}
+                    scaleFactor={scaleFactor}
+                    segmentLength={segmentLength}
+                />
             </div>
         </>
     )

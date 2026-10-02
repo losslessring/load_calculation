@@ -14,24 +14,36 @@ import { distance, splitLine } from '../utils/geometry/geometry.js'
 export default function Canvas({
     lines,
     polygons,
+    scaleFactor,
+    segmentLength,
 }: {
     lines: VertexCoordinates[][]
     polygons: VertexCoordinates[][]
+    scaleFactor: number
+    segmentLength: number
 }) {
     const ref = useRef(null)
 
     useEffect(() => {
+        if (!lines) {
+            return
+        }
+
+        if (!polygons) {
+            return
+        }
         const canvas = ref.current
         // @ts-ignore
         const ctx: CanvasRenderingContext2D = canvas?.getContext('2d')
+        ctx.reset()
 
         ctx.scale(1, 1)
 
-        const scaleFactor = 15
+        // const scaleFactor = 15
         const shiftX = 0
         const shiftY = 0
 
-        const segmentLength = 20
+        // const segmentLength = 20
 
         const transformedLines = lines.map((line, index) => {
             return [
@@ -213,7 +225,7 @@ export default function Canvas({
         console.log(coloredPointsHeatmap)
         drawColoredPointsFlat(ctx, coloredPointsHeatmap, 10, 'heatmap')
         drawPointValues(ctx, coloredPointsHeatmap, 'value', 0, 0)
-    }, [lines])
+    }, [lines, scaleFactor, segmentLength])
     return (
         <canvas
             className="drawing-canvas"
