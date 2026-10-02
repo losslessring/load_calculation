@@ -87,9 +87,10 @@ export function drawColoredPointsFlat(
     ctx.restore()
 }
 
-export function drawPointIndexes(
+export function drawPointValues(
     ctx: CanvasRenderingContext2D,
-    points: ColoredPoint[],
+    points: any,
+    displayProperty: string,
     xShift: number,
     yShift: number
 ) {
@@ -99,8 +100,8 @@ export function drawPointIndexes(
     // const pointSizeShift = pointSize / 2
 
     // points.forEach((line) => {
-    points.forEach((point, index) => {
-        ctx.fillStyle = point.color
+    points.forEach((point: any, index: number) => {
+        // ctx.fillStyle = point.color
         // ctx.fillRect(
         //     point.x - pointSizeShift,
         //     point.y - pointSizeShift,
@@ -118,7 +119,14 @@ export function drawPointIndexes(
         // ctx.strokeText(text, px + offsetX, py + offsetY);
 
         // ctx.fillStyle = 'black';
-        ctx.fillText(index.toString(), point.x + xShift, point.y + yShift)
+        // ctx.fillText(index.toString(), point.x + xShift, point.y + yShift)
+        ctx.fillText(
+            point[displayProperty] === undefined
+                ? ''
+                : point[displayProperty].toFixed(),
+            point.x + xShift,
+            point.y + yShift
+        )
     })
     // })
 

@@ -5,7 +5,7 @@ import { colors } from '../utils/colors/colors'
 import {
     drawColoredPointsFlat,
     drawLines,
-    drawPointIndexes,
+    drawPointValues,
     heatmap,
 } from '../utils/draw/draw'
 import { fillPolygons } from '../utils/draw/fillPolygons.js'
@@ -25,11 +25,13 @@ export default function Canvas({
         // @ts-ignore
         const ctx: CanvasRenderingContext2D = canvas?.getContext('2d')
 
-        ctx.scale(1, -1)
+        ctx.scale(1, 1)
 
-        const scaleFactor = 25
+        const scaleFactor = 15
         const shiftX = 0
-        const shiftY = 500
+        const shiftY = 0
+
+        const segmentLength = 20
 
         const transformedLines = lines.map((line, index) => {
             return [
@@ -81,7 +83,7 @@ export default function Canvas({
                     start: line[0],
                     end: line[1],
                     segments: undefined,
-                    segmentLength: 8,
+                    segmentLength: segmentLength,
                 })
             })
             .map((line: any, index) => {
@@ -128,12 +130,12 @@ export default function Canvas({
                 },
                 { distance: Infinity, color: 'black' }
             )
-            return closestLine.color
+            return closestLine
         }
 
         const coloredPoints = lineSegmentPoints.flat()
         // drawColoredPointsFlat(ctx, coloredPoints, 8, 'color')
-        drawPointIndexes(ctx, coloredPoints, 10, -20)
+        // drawPointIndexes(ctx, coloredPoints, 10, -20)
 
         console.log('colored points')
         console.log(coloredPoints)
@@ -171,7 +173,7 @@ export default function Canvas({
             shiftY,
             coloredLines,
             alpha: 0.75,
-            //calculatePixelColor: calculatePixelColor,
+            // calculatePixelColor: calculatePixelColor,
             calculatePixelColor: calculatePixelColorByClosestSegmentPoint,
         })
 
@@ -189,7 +191,10 @@ export default function Canvas({
         console.log(groupedPixelData)
 
         const groupedPixelDataArray = Object.entries(groupedPixelData).map(
-            (point) => ({ index: parseInt(point[0]), value: point[1] })
+            (point) => ({
+                index: parseInt(point[0]),
+                value: (point[1] as number) / segmentLength,
+            })
         )
         console.log('grouped pixel data array')
         console.log(groupedPixelDataArray)
@@ -204,17 +209,22 @@ export default function Canvas({
                 heatmap: heatmapPixelData.find(
                     (pixelData) => pixelData.index === index
                 )?.heatmap,
+
+                value: groupedPixelDataArray.find(
+                    (pixelData: any) => pixelData.index === index
+                )?.value,
             }
         })
         console.log('colored points heatmap')
         console.log(coloredPointsHeatmap)
-        drawColoredPointsFlat(ctx, coloredPointsHeatmap, 8, 'heatmap')
+        drawColoredPointsFlat(ctx, coloredPointsHeatmap, 10, 'heatmap')
+        drawPointValues(ctx, coloredPointsHeatmap, 'value', 0, 0)
     }, [lines])
     return (
         <canvas
             className="drawing-canvas"
-            width="800"
-            height="800"
+            width="1600"
+            height="1600"
             ref={ref}
         ></canvas>
     )
