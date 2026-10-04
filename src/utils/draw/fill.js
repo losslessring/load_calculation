@@ -12,8 +12,8 @@ export const scanlinePoly = (
 
     var x, y, xx
     // ctx.fillStyle = col
-    ctx.save()
-    ctx.globalAlpha = alpha
+    // ctx.save()
+    // ctx.globalAlpha = alpha
     b.left = Math.floor(b.left)
     b.top = Math.floor(b.top)
     for (y = b.top; y <= b.bottom; y++) {
@@ -31,10 +31,10 @@ export const scanlinePoly = (
                     const xE = Math.floor(nx2)
                     for (xx = xS; xx < xE; xx++) {
                         const calculatedPixel = calculatePixelColor(xx, y)
-                        pixelData.push(calculatedPixel)
-                        ctx.fillStyle = calculatedPixel.color
+                        pixelData.push({ ...calculatedPixel, x: xx, y: y })
+                        // ctx.fillStyle = calculatedPixel.color
 
-                        ctx.fillRect(xx, y, 1, 1)
+                        // ctx.fillRect(xx, y, 1, 1)
                     }
                     x = nx2
                 } else {
@@ -45,7 +45,7 @@ export const scanlinePoly = (
             }
         }
     }
-    ctx.restore()
+    // ctx.restore()
     return pixelData
 }
 

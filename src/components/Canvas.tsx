@@ -5,6 +5,7 @@ import { colors } from '../utils/colors/colors'
 import {
     drawColoredPointsFlat,
     drawLines,
+    drawPixels,
     drawPointValues,
     heatmap,
 } from '../utils/draw/draw'
@@ -16,11 +17,15 @@ export default function Canvas({
     polygons,
     scaleFactor,
     segmentLength,
+    distributedLoad,
+    showLoadDistribution,
 }: {
     lines: VertexCoordinates[][]
     polygons: VertexCoordinates[][]
     scaleFactor: number
     segmentLength: number
+    distributedLoad: number
+    showLoadDistribution: boolean
 }) {
     const ref = useRef(null)
 
@@ -185,6 +190,10 @@ export default function Canvas({
 
         console.log('pixel data')
         console.log(pixelData)
+
+        if (showLoadDistribution) {
+            drawPixels(ctx, pixelData, 1)
+        }
         const groupedPixelData = pixelData
             .flat()
             .reduce((acc: any, cur: any) => {
@@ -199,7 +208,7 @@ export default function Canvas({
         const groupedPixelDataArray = Object.entries(groupedPixelData).map(
             (point) => ({
                 index: parseInt(point[0]),
-                value: (point[1] as number) / segmentLength,
+                value: ((point[1] as number) * scaleFactor) / segmentLength,
             })
         )
         console.log('grouped pixel data array')
@@ -209,23 +218,35 @@ export default function Canvas({
         console.log('heatmap pixel data')
         console.log(heatmapPixelData)
 
-        const coloredPointsHeatmap = coloredPoints.map((point, index) => {
-            return {
-                ...point,
-                heatmap: heatmapPixelData.find(
-                    (pixelData) => pixelData.index === index
-                )?.heatmap,
+        const coloredPointsHeatmap = coloredPoints
+            .map((point, index) => {
+                return {
+                    ...point,
+                    heatmap: heatmapPixelData.find(
+                        (pixelData) => pixelData.index === index
+                    )?.heatmap,
 
-                value: groupedPixelDataArray.find(
-                    (pixelData: any) => pixelData.index === index
-                )?.value,
-            }
-        })
+                    value: groupedPixelDataArray.find(
+                        (pixelData: any) => pixelData.index === index
+                    )?.value,
+                }
+            })
+            .map((point) => ({
+                ...point,
+                ordinate: point.value,
+                linearLoad: point.value * distributedLoad,
+            }))
         console.log('colored points heatmap')
         console.log(coloredPointsHeatmap)
         drawColoredPointsFlat(ctx, coloredPointsHeatmap, 10, 'heatmap')
         drawPointValues(ctx, coloredPointsHeatmap, 'value', 0, 0)
-    }, [lines, scaleFactor, segmentLength])
+    }, [
+        lines,
+        scaleFactor,
+        segmentLength,
+        distributedLoad,
+        showLoadDistribution,
+    ])
     return (
         <canvas
             className="drawing-canvas"

@@ -1,5 +1,6 @@
 import type { ColoredPoint } from '../../interfaces/ColoredPoint'
 import type { LineCoordinates } from '../../interfaces/LineCoordinates'
+import type { PixelData } from '../../interfaces/PixelData'
 import type { PointValue } from '../../interfaces/PointValue'
 import type { VertexCoordinates } from '../../interfaces/VertexCoordinates'
 import { splitLine } from '../geometry/geometry'
@@ -241,4 +242,21 @@ export function heatmap(data: PointValue[]) {
 
         return { index: point.index, heatmap: `hsl(${hue}, 100%, 50%)` }
     })
+}
+
+export function drawPixels(
+    ctx: CanvasRenderingContext2D,
+    polygonPixels: PixelData[][],
+    alpha: number
+) {
+    ctx.save()
+    ctx.globalAlpha = alpha
+    polygonPixels.forEach((pixels) => {
+        pixels.forEach((pixel) => {
+            ctx.fillStyle = pixel.color
+
+            ctx.fillRect(pixel.x, pixel.y, 1, 1)
+        })
+    })
+    ctx.restore()
 }
