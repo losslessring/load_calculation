@@ -101,7 +101,7 @@ export function drawPointValues(
     // const pointSizeShift = pointSize / 2
 
     // points.forEach((line) => {
-    points.forEach((point: any, index: number) => {
+    points.forEach((point: any) => {
         // ctx.fillStyle = point.color
         // ctx.fillRect(
         //     point.x - pointSizeShift,

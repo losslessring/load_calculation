@@ -1,6 +1,6 @@
 {
     "name": "load_calculation",
-    "homepage": "htpps://losslessring.github.io/load_calculation/",
+    "homepage": "https://losslessring.github.io/load_calculation/",
     "private": true,
     "version": "0.0.0",
     "type": "module",

@@ -58,7 +58,7 @@ export default function Canvas({
 
         // const segmentLength = 20
 
-        const transformedLines = lines.map((line, index) => {
+        const transformedLines = lines.map((line) => {
             return [
                 {
                     x: line[0].x / scaleFactor - shiftX,
@@ -103,7 +103,7 @@ export default function Canvas({
         console.log(polygons)
 
         const lineSegmentPoints = transformedLines
-            .map((line: any, index) => {
+            .map((line: any) => {
                 return splitLine({
                     start: line[0],
                     end: line[1],
