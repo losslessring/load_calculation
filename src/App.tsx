@@ -10,6 +10,10 @@ function App() {
     const [distributedLoad, setDistributedLoad] = useState(200)
 
     const [showLoadDistribution, setShowLoadDistribution] = useState(true)
+    const [showHeatmap, setShowHeatmap] = useState(true)
+    const [showLinearLoad, setShowLinearLoad] = useState(true)
+    const [showColoredPoints, setShowColoredPoints] = useState(false)
+    const [showOrdinate, setShowOrdinate] = useState(false)
 
     const handleFileChange = async (e: any) => {
         const file = e.target.files[0]
@@ -175,6 +179,60 @@ function App() {
                 </label>
             </div>
             <div>
+                <label>
+                    Показать тепловую карту
+                    <input
+                        type="checkbox"
+                        name="heatmap_checkbox"
+                        checked={showHeatmap}
+                        onChange={(e) => {
+                            setShowHeatmap(e.target.checked)
+                        }}
+                    />
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    Показать линейную нагрузку
+                    <input
+                        type="checkbox"
+                        name="linear_load_checkbox"
+                        checked={showLinearLoad}
+                        onChange={(e) => {
+                            setShowLinearLoad(e.target.checked)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Показать ординату
+                    <input
+                        type="checkbox"
+                        name="heatmap_checkbox"
+                        checked={showOrdinate}
+                        onChange={(e) => {
+                            setShowOrdinate(e.target.checked)
+                        }}
+                    />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Показать раскраску точек
+                    <input
+                        type="checkbox"
+                        name="point_color_checkbox"
+                        checked={showColoredPoints}
+                        onChange={(e) => {
+                            setShowColoredPoints(e.target.checked)
+                        }}
+                    />
+                </label>
+            </div>
+
+            <div>
                 {/* <Canvas lines={linesTest} polygons={polygonsTest} /> */}
                 <Canvas
                     lines={lines}
@@ -183,6 +241,10 @@ function App() {
                     segmentLength={segmentLength}
                     distributedLoad={distributedLoad}
                     showLoadDistribution={showLoadDistribution}
+                    showHeatmap={showHeatmap}
+                    showLinearLoad={showLinearLoad}
+                    showColoredPoints={showColoredPoints}
+                    showOrdinate={showOrdinate}
                 />
             </div>
         </>

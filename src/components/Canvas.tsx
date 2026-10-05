@@ -19,6 +19,10 @@ export default function Canvas({
     segmentLength,
     distributedLoad,
     showLoadDistribution,
+    showHeatmap,
+    showColoredPoints,
+    showOrdinate,
+    showLinearLoad,
 }: {
     lines: VertexCoordinates[][]
     polygons: VertexCoordinates[][]
@@ -26,6 +30,10 @@ export default function Canvas({
     segmentLength: number
     distributedLoad: number
     showLoadDistribution: boolean
+    showHeatmap: boolean
+    showColoredPoints: boolean
+    showOrdinate: boolean
+    showLinearLoad: boolean
 }) {
     const ref = useRef(null)
 
@@ -238,14 +246,28 @@ export default function Canvas({
             }))
         console.log('colored points heatmap')
         console.log(coloredPointsHeatmap)
-        drawColoredPointsFlat(ctx, coloredPointsHeatmap, 10, 'heatmap')
-        drawPointValues(ctx, coloredPointsHeatmap, 'value', 0, 0)
+        if (showHeatmap) {
+            drawColoredPointsFlat(ctx, coloredPointsHeatmap, 10, 'heatmap')
+        }
+        if (showColoredPoints) {
+            drawColoredPointsFlat(ctx, coloredPoints, 10, 'color')
+        }
+        if (showOrdinate) {
+            drawPointValues(ctx, coloredPointsHeatmap, 'ordinate', 0, 0)
+        }
+        if (showLinearLoad) {
+            drawPointValues(ctx, coloredPointsHeatmap, 'linearLoad', 0, 0)
+        }
     }, [
         lines,
         scaleFactor,
         segmentLength,
         distributedLoad,
         showLoadDistribution,
+        showHeatmap,
+        showLinearLoad,
+        showColoredPoints,
+        showOrdinate,
     ])
     return (
         <canvas
