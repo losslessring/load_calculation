@@ -93,7 +93,7 @@ function App() {
             </div>
             <div>
                 <label htmlFor="disturbel_load">
-                    Распределенная нагрузка {distributedLoad} {}
+                    Распределенная нагрузка кг/м2&nbsp; {distributedLoad} {}
                 </label>
                 <input
                     type="number"
