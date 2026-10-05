@@ -23,6 +23,7 @@ export default function Canvas({
     showColoredPoints,
     showOrdinate,
     showLinearLoad,
+    showOnlyNPoint,
 }: {
     lines: VertexCoordinates[][]
     polygons: VertexCoordinates[][]
@@ -34,6 +35,7 @@ export default function Canvas({
     showColoredPoints: boolean
     showOrdinate: boolean
     showLinearLoad: boolean
+    showOnlyNPoint: number
 }) {
     const ref = useRef(null)
 
@@ -253,10 +255,24 @@ export default function Canvas({
             drawColoredPointsFlat(ctx, coloredPoints, 10, 'color')
         }
         if (showOrdinate) {
-            drawPointValues(ctx, coloredPointsHeatmap, 'ordinate', 0, 0)
+            drawPointValues(
+                ctx,
+                coloredPointsHeatmap,
+                'ordinate',
+                0,
+                0,
+                showOnlyNPoint
+            )
         }
         if (showLinearLoad) {
-            drawPointValues(ctx, coloredPointsHeatmap, 'linearLoad', 0, 0)
+            drawPointValues(
+                ctx,
+                coloredPointsHeatmap,
+                'linearLoad',
+                0,
+                0,
+                showOnlyNPoint
+            )
         }
     }, [
         lines,
@@ -268,6 +284,7 @@ export default function Canvas({
         showLinearLoad,
         showColoredPoints,
         showOrdinate,
+        showOnlyNPoint,
     ])
     return (
         <canvas

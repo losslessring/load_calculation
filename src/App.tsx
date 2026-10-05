@@ -14,6 +14,7 @@ function App() {
     const [showLinearLoad, setShowLinearLoad] = useState(true)
     const [showColoredPoints, setShowColoredPoints] = useState(false)
     const [showOrdinate, setShowOrdinate] = useState(false)
+    const [showOnlyNPoint, setShowOnlyNPoint] = useState(1)
 
     const handleFileChange = async (e: any) => {
         const file = e.target.files[0]
@@ -231,6 +232,31 @@ function App() {
                     />
                 </label>
             </div>
+            <div>
+                <label htmlFor="scale">
+                    Показывать каждую {showOnlyNPoint} точку {}
+                </label>
+                <input
+                    type="number"
+                    id="show_nth_point"
+                    name="show_nth_point"
+                    min={1}
+                    defaultValue={1}
+                    onChange={(e) => {
+                        if (isNaN(Number(e.target.value))) {
+                            return
+                        }
+                        if (!Number(e.target.value)) {
+                            return
+                        }
+                        if (Number(e.target.value) < 1) {
+                            return
+                        }
+
+                        setShowOnlyNPoint(Number(e.target.value))
+                    }}
+                />
+            </div>
 
             <div>
                 {/* <Canvas lines={linesTest} polygons={polygonsTest} /> */}
@@ -245,6 +271,7 @@ function App() {
                     showLinearLoad={showLinearLoad}
                     showColoredPoints={showColoredPoints}
                     showOrdinate={showOrdinate}
+                    showOnlyNPoint={showOnlyNPoint}
                 />
             </div>
         </>

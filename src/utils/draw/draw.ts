@@ -74,7 +74,7 @@ export function drawColoredPointsFlat(
     const pointSizeShift = pointSize / 2
 
     points.forEach((point) => {
-        console.log(point[colorProperty])
+        // console.log(point[colorProperty])
         //@ts-ignore
         ctx.fillStyle = point[colorProperty]
         ctx.fillRect(
@@ -93,51 +93,37 @@ export function drawPointValues(
     points: any,
     displayProperty: string,
     xShift: number,
-    yShift: number
+    yShift: number,
+    showOnlyNPoint?: number
 ) {
     ctx.save()
-    // ctx.scale(1, -1)
 
-    // const pointSizeShift = pointSize / 2
-
-    // points.forEach((line) => {
-    points.forEach((point: any) => {
-        // ctx.fillStyle = point.color
-        // ctx.fillRect(
-        //     point.x - pointSizeShift,
-        //     point.y - pointSizeShift,
-        //     pointSize,
-        //     pointSize
-        // )
-
+    points.forEach((point: any, index: number) => {
         ctx.font = '10px sans-serif'
         ctx.textAlign = 'left'
         ctx.textBaseline = 'top'
 
-        // Optional: white outline for readability over busy backgrounds
-        // ctx.lineWidth = 3;
-        // ctx.strokeStyle = 'white';
-        // ctx.strokeText(text, px + offsetX, py + offsetY);
+        if (
+            showOnlyNPoint &&
+            // index !== 0 &&
+            // index !== points.length - 1 &&
+            index % showOnlyNPoint !== 0
+        ) {
+            return
+        }
 
-        // ctx.fillStyle = 'black';
-        // ctx.fillText(index.toString(), point.x + xShift, point.y + yShift)
         ctx.fillText(
-            point[displayProperty] === undefined
+            point[displayProperty] === undefined ||
+                Number.isNaN(point[displayProperty])
                 ? ''
                 : point[displayProperty].toFixed(),
             point.x + xShift,
             point.y + yShift
         )
     })
-    // })
 
     ctx.restore()
 }
-
-// const drawPointsOnSegment = (
-//     ctx: any,
-//     { startX, startY, endX, endY }: LineCoordinates
-// ) => {}
 
 export const drawPolygon = (
     ctx: CanvasRenderingContext2D,
