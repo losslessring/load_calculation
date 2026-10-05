@@ -244,7 +244,7 @@ export default function Canvas({
             .map((point) => ({
                 ...point,
                 ordinate: point.value,
-                linearLoad: point.value * distributedLoad,
+                linearLoad: (point.value * distributedLoad) / 1000,
             }))
         console.log('colored points heatmap')
         console.log(coloredPointsHeatmap)
