@@ -89,3 +89,10 @@ export function slopeCalculation(p1: VertexCoordinates, p2: VertexCoordinates) {
         slope: (p2.x - p1.x) / (p2.y - p1.y),
     }
 }
+
+export function angleBetween(
+    A: VertexCoordinates,
+    B: VertexCoordinates
+): number {
+    return Math.atan2(B.y - A.y, B.x - A.x)
+}

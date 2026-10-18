@@ -166,7 +166,8 @@ export default function Canvas({
                         currentPoint.x,
                         currentPoint.y
                     )
-                    return currentDistance < accumulator.distance
+
+                    return currentDistance <= accumulator.distance
                         ? {
                               pointIndex: currentIndex,
                               distance: currentDistance,

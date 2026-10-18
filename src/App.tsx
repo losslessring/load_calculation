@@ -88,13 +88,17 @@ function App() {
 
     return (
         <>
-            <h3>Сбор нагрузок</h3>
+            <h4>
+                Приведение равномерно распределённой нагрузки на перекрытие
+                [кг/м2] <br />к линейным нагрузкам на балки [кг/м]
+            </h4>
             <div>
                 <input type="file" onChange={handleFileChange} />
             </div>
             <div>
                 <label htmlFor="disturbel_load">
-                    Распределенная нагрузка кг/м2&nbsp; {distributedLoad} {}
+                    Распределённая нагрузка на перекрытие [кг/м2]&nbsp;{' '}
+                    {distributedLoad} {}
                 </label>
                 <input
                     type="number"
@@ -195,7 +199,7 @@ function App() {
 
             <div>
                 <label>
-                    Показать линейную нагрузку
+                    Показать линейную нагрузку на балку [кг/м]
                     <input
                         type="checkbox"
                         name="linear_load_checkbox"
