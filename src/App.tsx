@@ -95,172 +95,184 @@ function App() {
             <div>
                 <input type="file" onChange={handleFileChange} />
             </div>
-            <div>
-                <label htmlFor="disturbel_load">
-                    Распределённая нагрузка на перекрытие [кг/м2]&nbsp;{' '}
-                    {distributedLoad} {}
-                </label>
-                <input
-                    type="number"
-                    id="disturbel_load"
-                    name="disturbel_load"
-                    min={0}
-                    defaultValue={200}
-                    onChange={(e) => {
-                        if (isNaN(Number(e.target.value))) {
-                            return
-                        }
-                        if (!Number(e.target.value)) {
-                            return
-                        }
-                        if (Number(e.target.value) < 0) {
-                            return
-                        }
+            <dl className="controls">
+                <dt>
+                    <label htmlFor="disturbel_load">
+                        Распределённая нагрузка на перекрытие [кг/м2]&nbsp;
+                        {'   '}
+                    </label>
+                </dt>
+                <dd>
+                    <input
+                        type="number"
+                        id="disturbel_load"
+                        name="disturbel_load"
+                        min={0}
+                        defaultValue={200}
+                        onChange={(e) => {
+                            if (isNaN(Number(e.target.value))) {
+                                return
+                            }
+                            if (!Number(e.target.value)) {
+                                return
+                            }
+                            if (Number(e.target.value) < 0) {
+                                return
+                            }
 
-                        setDistributedLoad(Number(e.target.value))
-                    }}
-                />
-            </div>
-            <div>
-                <label htmlFor="scale">
-                    Масштаб делить на {scaleFactor} {}
-                </label>
-                <input
-                    type="number"
-                    id="scale"
-                    name="scale"
-                    min={1}
-                    defaultValue={20}
-                    onChange={(e) => {
-                        if (isNaN(Number(e.target.value))) {
-                            return
-                        }
-                        if (!Number(e.target.value)) {
-                            return
-                        }
-                        if (Number(e.target.value) < 4) {
-                            return
-                        }
+                            setDistributedLoad(Number(e.target.value))
+                        }}
+                    />
+                </dd>
+                <dt>
+                    <label htmlFor="scale">Масштаб делить на {}</label>
+                </dt>
+                <dd>
+                    <input
+                        type="number"
+                        id="scale"
+                        name="scale"
+                        min={1}
+                        defaultValue={20}
+                        onChange={(e) => {
+                            if (isNaN(Number(e.target.value))) {
+                                return
+                            }
+                            if (!Number(e.target.value)) {
+                                return
+                            }
+                            if (Number(e.target.value) < 4) {
+                                return
+                            }
 
-                        setScaleFactor(Number(e.target.value))
-                    }}
-                />
-            </div>
-            <div>
-                <label htmlFor="segment_length">
-                    Длина сегмента {segmentLength} {}
-                </label>
-                <input
-                    type="number"
-                    id="segment_length"
-                    name="segment_length"
-                    min={1}
-                    defaultValue={20}
-                    onChange={(e) => {
-                        if (isNaN(Number(e.target.value))) {
-                            return
-                        }
-                        if (!Number(e.target.value)) {
-                            return
-                        }
-                        if (Number(e.target.value) < 4) {
-                            return
-                        }
-                        setSegmentLength(Number(e.target.value))
-                    }}
-                />
-            </div>
-            <div>
-                <label>
-                    Показать распределение нагрузки
+                            setScaleFactor(Number(e.target.value))
+                        }}
+                    />
+                </dd>
+
+                <dt>
+                    <label htmlFor="segment_length">Длина сегмента {}</label>
+                </dt>
+                <dd>
+                    <input
+                        type="number"
+                        id="segment_length"
+                        name="segment_length"
+                        min={1}
+                        defaultValue={20}
+                        onChange={(e) => {
+                            if (isNaN(Number(e.target.value))) {
+                                return
+                            }
+                            if (!Number(e.target.value)) {
+                                return
+                            }
+                            if (Number(e.target.value) < 4) {
+                                return
+                            }
+                            setSegmentLength(Number(e.target.value))
+                        }}
+                    />
+                </dd>
+                <dt>
+                    <label htmlFor="load_distribution_checkbox">
+                        Показать распределение нагрузки
+                    </label>
+                </dt>
+                <dd>
                     <input
                         type="checkbox"
-                        name="load_distribution_checkbox"
+                        id="load_distribution_checkbox"
                         checked={showLoadDistribution}
                         onChange={(e) => {
                             setShowLoadDistribution(e.target.checked)
                         }}
                     />
-                </label>
-            </div>
-            <div>
-                <label>
-                    Показать тепловую карту
+                </dd>
+                <dt>
+                    <label htmlFor="heatmap_checkbox">
+                        Показать тепловую карту
+                    </label>
+                </dt>
+                <dd>
                     <input
                         type="checkbox"
-                        name="heatmap_checkbox"
+                        id="heatmap_checkbox"
                         checked={showHeatmap}
                         onChange={(e) => {
                             setShowHeatmap(e.target.checked)
                         }}
                     />
-                </label>
-            </div>
+                </dd>
 
-            <div>
-                <label>
-                    Показать линейную нагрузку на балку [кг/м]
+                <dt>
+                    <label htmlFor="linear_load_checkbox">
+                        Показать линейную нагрузку на балку [кг/м]
+                    </label>
+                </dt>
+                <dd>
                     <input
                         type="checkbox"
-                        name="linear_load_checkbox"
+                        id="linear_load_checkbox"
                         checked={showLinearLoad}
                         onChange={(e) => {
                             setShowLinearLoad(e.target.checked)
                         }}
                     />
-                </label>
-            </div>
-            <div>
-                <label>
-                    Показать ординату
-                    <input
-                        type="checkbox"
-                        name="heatmap_checkbox"
-                        checked={showOrdinate}
-                        onChange={(e) => {
-                            setShowOrdinate(e.target.checked)
-                        }}
-                    />
-                </label>
-            </div>
-            <div>
-                <label>
-                    Показать раскраску точек
-                    <input
-                        type="checkbox"
-                        name="point_color_checkbox"
-                        checked={showColoredPoints}
-                        onChange={(e) => {
-                            setShowColoredPoints(e.target.checked)
-                        }}
-                    />
-                </label>
-            </div>
-            <div>
-                <label htmlFor="scale">
-                    Показывать каждую {showOnlyNPoint} точку {}
-                </label>
-                <input
-                    type="number"
-                    id="show_nth_point"
-                    name="show_nth_point"
-                    min={1}
-                    defaultValue={1}
-                    onChange={(e) => {
-                        if (isNaN(Number(e.target.value))) {
-                            return
-                        }
-                        if (!Number(e.target.value)) {
-                            return
-                        }
-                        if (Number(e.target.value) < 1) {
-                            return
-                        }
+                </dd>
 
-                        setShowOnlyNPoint(Number(e.target.value))
-                    }}
-                />
-            </div>
+                <div>
+                    <label>
+                        Показать ординату
+                        <input
+                            type="checkbox"
+                            name="heatmap_checkbox"
+                            checked={showOrdinate}
+                            onChange={(e) => {
+                                setShowOrdinate(e.target.checked)
+                            }}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Показать раскраску точек
+                        <input
+                            type="checkbox"
+                            name="point_color_checkbox"
+                            checked={showColoredPoints}
+                            onChange={(e) => {
+                                setShowColoredPoints(e.target.checked)
+                            }}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label htmlFor="scale">
+                        Показывать каждую {showOnlyNPoint} точку {}
+                    </label>
+                    <input
+                        type="number"
+                        id="show_nth_point"
+                        name="show_nth_point"
+                        min={1}
+                        defaultValue={1}
+                        onChange={(e) => {
+                            if (isNaN(Number(e.target.value))) {
+                                return
+                            }
+                            if (!Number(e.target.value)) {
+                                return
+                            }
+                            if (Number(e.target.value) < 1) {
+                                return
+                            }
+
+                            setShowOnlyNPoint(Number(e.target.value))
+                        }}
+                    />
+                </div>
+            </dl>
 
             <div>
                 {/* <Canvas lines={linesTest} polygons={polygonsTest} /> */}

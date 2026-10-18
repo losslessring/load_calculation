@@ -109,6 +109,38 @@ code {
   background: var(--code-bg);
 }
 
+input[type="file"] {
+  margin-bottom: 1rem;
+}
+
+input[type="number"] {
+  width: 60px;
+  text-align: left;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;   /* label | input */
+  gap: 10px 15px;                     /* row-gap | column-gap */
+  align-items: center;
+  margin: 0;
+}
+
+.controls dt {
+  text-align: right;   
+}
+
+.controls dd {
+  margin: 0; 
+  text-align: start;          
+}
+
+.controls input {
+  /* width: 100%; */
+  /* max-width: 300px; */
+  /* box-sizing: border-box; */
+  
+}
 
 
 .drawing-canvas {
