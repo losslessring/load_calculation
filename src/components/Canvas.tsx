@@ -34,7 +34,7 @@ export default function Canvas({
     distributedLoad: number
     showLoadDistribution: boolean
     showHeatmap: boolean
-    showColoredPoints: boolean
+    // showColoredPoints: boolean
     showOnlyNPoint: number
     showValue: ShowValue
     startCalculation: boolean
