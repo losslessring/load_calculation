@@ -21,7 +21,7 @@ export default function Canvas({
     distributedLoad,
     showLoadDistribution,
     showHeatmap,
-    showColoredPoints,
+    // showColoredPoints,
     showOnlyNPoint,
     showValue,
     startCalculation,
@@ -258,9 +258,9 @@ export default function Canvas({
         if (showHeatmap) {
             drawColoredPointsFlat(ctx, coloredPointsHeatmap, 10, 'heatmap')
         }
-        if (showColoredPoints) {
-            drawColoredPointsFlat(ctx, coloredPoints, 10, 'color')
-        }
+        // if (showColoredPoints) {
+        //     drawColoredPointsFlat(ctx, coloredPoints, 10, 'color')
+        // }
         if (showValue === ShowValue.Ordinate) {
             drawPointValues(
                 ctx,

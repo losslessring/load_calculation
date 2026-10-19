@@ -21,7 +21,7 @@ function App() {
     const [showLoadDistribution, setShowLoadDistribution] = useState(true)
     const [showHeatmap, setShowHeatmap] = useState(true)
 
-    const [showColoredPoints, setShowColoredPoints] = useState(false)
+    // const [showColoredPoints, setShowColoredPoints] = useState(false)
 
     const [showOnlyNPoint, setShowOnlyNPoint] = useState(1)
     const [startCalculation, setStartCalculation] = useState(false)
@@ -295,7 +295,7 @@ function App() {
                     distributedLoad={distributedLoad}
                     showLoadDistribution={showLoadDistribution}
                     showHeatmap={showHeatmap}
-                    showColoredPoints={showColoredPoints}
+                    // showColoredPoints={showColoredPoints}
                     showOnlyNPoint={showOnlyNPoint}
                     showValue={showValue}
                     startCalculation={startCalculation}
