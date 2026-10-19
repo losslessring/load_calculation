@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { ShowValue } from '../App.js'
 import type { PointValue } from '../interfaces/PointValue.js'
 import type { VertexCoordinates } from '../interfaces/VertexCoordinates'
 import { colors } from '../utils/colors/colors'
@@ -21,9 +22,8 @@ export default function Canvas({
     showLoadDistribution,
     showHeatmap,
     showColoredPoints,
-    showOrdinate,
-    showLinearLoad,
     showOnlyNPoint,
+    showValue,
     startCalculation,
     calculationTrigger,
 }: {
@@ -35,9 +35,8 @@ export default function Canvas({
     showLoadDistribution: boolean
     showHeatmap: boolean
     showColoredPoints: boolean
-    showOrdinate: boolean
-    showLinearLoad: boolean
     showOnlyNPoint: number
+    showValue: ShowValue
     startCalculation: boolean
     calculationTrigger: Function
 }) {
@@ -262,7 +261,7 @@ export default function Canvas({
         if (showColoredPoints) {
             drawColoredPointsFlat(ctx, coloredPoints, 10, 'color')
         }
-        if (showOrdinate) {
+        if (showValue === ShowValue.Ordinate) {
             drawPointValues(
                 ctx,
                 coloredPointsHeatmap,
@@ -272,7 +271,7 @@ export default function Canvas({
                 showOnlyNPoint
             )
         }
-        if (showLinearLoad) {
+        if (showValue === ShowValue.LinearLoad) {
             drawPointValues(
                 ctx,
                 coloredPointsHeatmap,

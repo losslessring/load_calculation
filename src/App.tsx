@@ -2,7 +2,16 @@ import { DxfParser } from 'dxf-parser'
 import { useState } from 'react'
 import Canvas from './components/Canvas'
 
+export enum ShowValue {
+    LinearLoad = 'LINEAR_LOAD',
+    Ordinate = 'ORDINATE',
+}
 function App() {
+    const labels: Record<ShowValue, string> = {
+        [ShowValue.LinearLoad]: 'линейная нагрузка на балку [кг/м]',
+        [ShowValue.Ordinate]: 'ордината [мм]',
+    }
+
     const [lines, setLines] = useState<any>(null)
     const [polygons, setPolygons] = useState<any>(null)
     const [scaleFactor, setScaleFactor] = useState(20)
@@ -11,11 +20,12 @@ function App() {
 
     const [showLoadDistribution, setShowLoadDistribution] = useState(true)
     const [showHeatmap, setShowHeatmap] = useState(true)
-    const [showLinearLoad, setShowLinearLoad] = useState(true)
+
     const [showColoredPoints, setShowColoredPoints] = useState(false)
-    const [showOrdinate, setShowOrdinate] = useState(false)
+
     const [showOnlyNPoint, setShowOnlyNPoint] = useState(1)
     const [startCalculation, setStartCalculation] = useState(false)
+    const [showValue, setShowValue] = useState<ShowValue>(ShowValue.LinearLoad)
 
     const handleFileChange = async (e: any) => {
         const file = e.target.files[0]
@@ -206,37 +216,7 @@ function App() {
                     />
                 </dd>
 
-                <dt>
-                    <label htmlFor="linear_load_checkbox">
-                        Показать линейную нагрузку на балку [кг/м]
-                    </label>
-                </dt>
-                <dd>
-                    <input
-                        type="checkbox"
-                        id="linear_load_checkbox"
-                        checked={showLinearLoad}
-                        onChange={(e) => {
-                            setShowLinearLoad(e.target.checked)
-                        }}
-                    />
-                </dd>
-
-                <dt>
-                    <label>Показать ординату</label>
-                </dt>
-                <dd>
-                    <input
-                        type="checkbox"
-                        name="heatmap_checkbox"
-                        checked={showOrdinate}
-                        onChange={(e) => {
-                            setShowOrdinate(e.target.checked)
-                        }}
-                    />
-                </dd>
-
-                <dt>
+                {/* <dt>
                     <label>Показать раскраску точек</label>
                 </dt>
                 <dd>
@@ -248,6 +228,23 @@ function App() {
                             setShowColoredPoints(e.target.checked)
                         }}
                     />
+                </dd> */}
+                <dt>
+                    <label>Показать</label>
+                </dt>
+                <dd>
+                    <select
+                        value={showValue}
+                        onChange={(e) => {
+                            setShowValue(e.target.value as ShowValue)
+                        }}
+                    >
+                        {Object.values(ShowValue).map((f) => (
+                            <option key={f} value={f}>
+                                {labels[f]}
+                            </option>
+                        ))}
+                    </select>
                 </dd>
 
                 <dt>
@@ -298,10 +295,9 @@ function App() {
                     distributedLoad={distributedLoad}
                     showLoadDistribution={showLoadDistribution}
                     showHeatmap={showHeatmap}
-                    showLinearLoad={showLinearLoad}
                     showColoredPoints={showColoredPoints}
-                    showOrdinate={showOrdinate}
                     showOnlyNPoint={showOnlyNPoint}
+                    showValue={showValue}
                     startCalculation={startCalculation}
                     calculationTrigger={() => setStartCalculation(false)}
                 />
