@@ -134,13 +134,17 @@ input[type="number"] {
   margin: 0; 
   text-align: start;          
 }
-
-.controls input {
-  /* width: 100%; */
-  /* max-width: 300px; */
-  /* box-sizing: border-box; */
-  
+.calculate {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
 }
+
+.calculate-button {
+  width: 100px
+}
+
 
 
 .drawing-canvas {

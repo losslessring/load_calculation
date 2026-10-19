@@ -24,6 +24,8 @@ export default function Canvas({
     showOrdinate,
     showLinearLoad,
     showOnlyNPoint,
+    startCalculation,
+    calculationTrigger,
 }: {
     lines: VertexCoordinates[][]
     polygons: VertexCoordinates[][]
@@ -36,10 +38,15 @@ export default function Canvas({
     showOrdinate: boolean
     showLinearLoad: boolean
     showOnlyNPoint: number
+    startCalculation: boolean
+    calculationTrigger: Function
 }) {
     const ref = useRef(null)
 
     useEffect(() => {
+        if (!startCalculation) {
+            return
+        }
         if (!lines) {
             return
         }
@@ -275,17 +282,20 @@ export default function Canvas({
                 showOnlyNPoint
             )
         }
+
+        calculationTrigger()
     }, [
-        lines,
-        scaleFactor,
-        segmentLength,
-        distributedLoad,
-        showLoadDistribution,
-        showHeatmap,
-        showLinearLoad,
-        showColoredPoints,
-        showOrdinate,
-        showOnlyNPoint,
+        // lines,
+        // scaleFactor,
+        // segmentLength,
+        // distributedLoad,
+        // showLoadDistribution,
+        // showHeatmap,
+        // showLinearLoad,
+        // showColoredPoints,
+        // showOrdinate,
+        // showOnlyNPoint,
+        startCalculation,
     ])
     return (
         <canvas

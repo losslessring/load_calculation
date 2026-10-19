@@ -15,6 +15,7 @@ function App() {
     const [showColoredPoints, setShowColoredPoints] = useState(false)
     const [showOrdinate, setShowOrdinate] = useState(false)
     const [showOnlyNPoint, setShowOnlyNPoint] = useState(1)
+    const [startCalculation, setStartCalculation] = useState(false)
 
     const handleFileChange = async (e: any) => {
         const file = e.target.files[0]
@@ -221,36 +222,40 @@ function App() {
                     />
                 </dd>
 
-                <div>
-                    <label>
-                        Показать ординату
-                        <input
-                            type="checkbox"
-                            name="heatmap_checkbox"
-                            checked={showOrdinate}
-                            onChange={(e) => {
-                                setShowOrdinate(e.target.checked)
-                            }}
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Показать раскраску точек
-                        <input
-                            type="checkbox"
-                            name="point_color_checkbox"
-                            checked={showColoredPoints}
-                            onChange={(e) => {
-                                setShowColoredPoints(e.target.checked)
-                            }}
-                        />
-                    </label>
-                </div>
-                <div>
+                <dt>
+                    <label>Показать ординату</label>
+                </dt>
+                <dd>
+                    <input
+                        type="checkbox"
+                        name="heatmap_checkbox"
+                        checked={showOrdinate}
+                        onChange={(e) => {
+                            setShowOrdinate(e.target.checked)
+                        }}
+                    />
+                </dd>
+
+                <dt>
+                    <label>Показать раскраску точек</label>
+                </dt>
+                <dd>
+                    <input
+                        type="checkbox"
+                        name="point_color_checkbox"
+                        checked={showColoredPoints}
+                        onChange={(e) => {
+                            setShowColoredPoints(e.target.checked)
+                        }}
+                    />
+                </dd>
+
+                <dt>
                     <label htmlFor="scale">
                         Показывать каждую {showOnlyNPoint} точку {}
                     </label>
+                </dt>
+                <dd>
                     <input
                         type="number"
                         id="show_nth_point"
@@ -271,8 +276,17 @@ function App() {
                             setShowOnlyNPoint(Number(e.target.value))
                         }}
                     />
-                </div>
+                </dd>
             </dl>
+            <div className="calculate">
+                <button
+                    className="calculate-button"
+                    onClick={() => setStartCalculation(true)}
+                    disabled={startCalculation}
+                >
+                    Рассчитать
+                </button>
+            </div>
 
             <div>
                 {/* <Canvas lines={linesTest} polygons={polygonsTest} /> */}
@@ -288,6 +302,8 @@ function App() {
                     showColoredPoints={showColoredPoints}
                     showOrdinate={showOrdinate}
                     showOnlyNPoint={showOnlyNPoint}
+                    startCalculation={startCalculation}
+                    calculationTrigger={() => setStartCalculation(false)}
                 />
             </div>
         </>
