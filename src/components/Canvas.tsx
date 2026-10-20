@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
-import { ShowValue } from '../App.js'
+import { ShowNumericValue, ShowPoint } from '../App.js'
 import type { PointValue } from '../interfaces/PointValue.js'
 import type { VertexCoordinates } from '../interfaces/VertexCoordinates'
-import { colors } from '../utils/colors/colors'
+import { seededLightPalette } from '../utils/colors/colors.js'
 import {
     drawColoredPointsFlat,
     drawLines,
@@ -13,6 +13,8 @@ import {
 import { fillPolygons } from '../utils/draw/fillPolygons.js'
 import { distance, splitLine } from '../utils/geometry/geometry.js'
 
+// const colors = COLORS.toSorted(() => Math.random() - 0.5)
+
 export default function Canvas({
     lines,
     polygons,
@@ -20,10 +22,9 @@ export default function Canvas({
     segmentLength,
     distributedLoad,
     showLoadDistribution,
-    showHeatmap,
-    // showColoredPoints,
     showOnlyNPoint,
     showValue,
+    showPoint,
     startCalculation,
     calculationTrigger,
 }: {
@@ -33,10 +34,9 @@ export default function Canvas({
     segmentLength: number
     distributedLoad: number
     showLoadDistribution: boolean
-    showHeatmap: boolean
-    // showColoredPoints: boolean
     showOnlyNPoint: number
-    showValue: ShowValue
+    showValue: ShowNumericValue
+    showPoint: ShowPoint
     startCalculation: boolean
     calculationTrigger: Function
 }) {
@@ -60,11 +60,13 @@ export default function Canvas({
 
         ctx.scale(1, 1)
 
-        // const scaleFactor = 15
         const shiftX = 0
         const shiftY = 0
 
-        // const segmentLength = 20
+        // const colors = lines.map((_, index) => seededRandomColor(index))
+        //const colors = COLORS
+
+        const colors = seededLightPalette('a', lines.length)
 
         const transformedLines = lines.map((line) => {
             return [
@@ -255,13 +257,13 @@ export default function Canvas({
             }))
         console.log('colored points heatmap')
         console.log(coloredPointsHeatmap)
-        if (showHeatmap) {
+        if (showPoint === ShowPoint.Heatmap) {
             drawColoredPointsFlat(ctx, coloredPointsHeatmap, 10, 'heatmap')
         }
-        // if (showColoredPoints) {
-        //     drawColoredPointsFlat(ctx, coloredPoints, 10, 'color')
-        // }
-        if (showValue === ShowValue.Ordinate) {
+        if (showPoint === ShowPoint.Color) {
+            drawColoredPointsFlat(ctx, coloredPoints, 10, 'color', 1, 'black')
+        }
+        if (showValue === ShowNumericValue.Ordinate) {
             drawPointValues(
                 ctx,
                 coloredPointsHeatmap,
@@ -271,7 +273,7 @@ export default function Canvas({
                 showOnlyNPoint
             )
         }
-        if (showValue === ShowValue.LinearLoad) {
+        if (showValue === ShowNumericValue.LinearLoad) {
             drawPointValues(
                 ctx,
                 coloredPointsHeatmap,
@@ -283,19 +285,7 @@ export default function Canvas({
         }
 
         calculationTrigger()
-    }, [
-        // lines,
-        // scaleFactor,
-        // segmentLength,
-        // distributedLoad,
-        // showLoadDistribution,
-        // showHeatmap,
-        // showLinearLoad,
-        // showColoredPoints,
-        // showOrdinate,
-        // showOnlyNPoint,
-        startCalculation,
-    ])
+    }, [startCalculation])
     return (
         <canvas
             className="drawing-canvas"

@@ -2,14 +2,29 @@ import { DxfParser } from 'dxf-parser'
 import { useState } from 'react'
 import Canvas from './components/Canvas'
 
-export enum ShowValue {
+export enum ShowPoint {
+    Heatmap = 'HEATMAP',
+    Color = 'COLOR',
+    Nothing = 'NOTHING',
+}
+
+export enum ShowNumericValue {
     LinearLoad = 'LINEAR_LOAD',
     Ordinate = 'ORDINATE',
+    Nothing = 'NOTHING',
 }
+
 function App() {
-    const labels: Record<ShowValue, string> = {
-        [ShowValue.LinearLoad]: 'линейная нагрузка на балку [кг/м]',
-        [ShowValue.Ordinate]: 'ордината [мм]',
+    const numericValueLabels: Record<ShowNumericValue, string> = {
+        [ShowNumericValue.LinearLoad]: 'линейная нагрузка на балку [кг/м]',
+        [ShowNumericValue.Ordinate]: 'ордината [мм]',
+        [ShowNumericValue.Nothing]: 'Не отображать',
+    }
+
+    const pointLabels: Record<ShowPoint, string> = {
+        [ShowPoint.Heatmap]: 'Тепловая карта',
+        [ShowPoint.Color]: 'Цвет балки',
+        [ShowPoint.Nothing]: 'Не отображать',
     }
 
     const [lines, setLines] = useState<any>(null)
@@ -19,13 +34,14 @@ function App() {
     const [distributedLoad, setDistributedLoad] = useState(200)
 
     const [showLoadDistribution, setShowLoadDistribution] = useState(true)
-    const [showHeatmap, setShowHeatmap] = useState(true)
-
-    // const [showColoredPoints, setShowColoredPoints] = useState(false)
 
     const [showOnlyNPoint, setShowOnlyNPoint] = useState(1)
     const [startCalculation, setStartCalculation] = useState(false)
-    const [showValue, setShowValue] = useState<ShowValue>(ShowValue.LinearLoad)
+    const [showValue, setShowValue] = useState<ShowNumericValue>(
+        ShowNumericValue.LinearLoad
+    )
+
+    const [showPoint, setShowPoint] = useState<ShowPoint>(ShowPoint.Heatmap)
 
     const handleFileChange = async (e: any) => {
         const file = e.target.files[0]
@@ -108,7 +124,7 @@ function App() {
             </div>
             <dl className="controls">
                 <dt>
-                    <label htmlFor="disturbel_load">
+                    <label htmlFor="distributed_load">
                         Распределённая нагрузка на перекрытие [кг/м2]&nbsp;
                         {'   '}
                     </label>
@@ -116,8 +132,8 @@ function App() {
                 <dd>
                     <input
                         type="number"
-                        id="disturbel_load"
-                        name="disturbel_load"
+                        id="distributed_load"
+                        name="distributed_load"
                         min={0}
                         defaultValue={200}
                         onChange={(e) => {
@@ -200,48 +216,38 @@ function App() {
                         }}
                     />
                 </dd>
-                <dt>
-                    <label htmlFor="heatmap_checkbox">
-                        Показать тепловую карту
-                    </label>
-                </dt>
-                <dd>
-                    <input
-                        type="checkbox"
-                        id="heatmap_checkbox"
-                        checked={showHeatmap}
-                        onChange={(e) => {
-                            setShowHeatmap(e.target.checked)
-                        }}
-                    />
-                </dd>
 
-                {/* <dt>
-                    <label>Показать раскраску точек</label>
-                </dt>
-                <dd>
-                    <input
-                        type="checkbox"
-                        name="point_color_checkbox"
-                        checked={showColoredPoints}
-                        onChange={(e) => {
-                            setShowColoredPoints(e.target.checked)
-                        }}
-                    />
-                </dd> */}
                 <dt>
-                    <label>Показать</label>
+                    <label>Показать значения</label>
                 </dt>
                 <dd>
                     <select
                         value={showValue}
                         onChange={(e) => {
-                            setShowValue(e.target.value as ShowValue)
+                            setShowValue(e.target.value as ShowNumericValue)
                         }}
                     >
-                        {Object.values(ShowValue).map((f) => (
+                        {Object.values(ShowNumericValue).map((f) => (
                             <option key={f} value={f}>
-                                {labels[f]}
+                                {numericValueLabels[f]}
+                            </option>
+                        ))}
+                    </select>
+                </dd>
+
+                <dt>
+                    <label>Показать точки</label>
+                </dt>
+                <dd>
+                    <select
+                        value={showPoint}
+                        onChange={(e) => {
+                            setShowPoint(e.target.value as ShowPoint)
+                        }}
+                    >
+                        {Object.values(ShowPoint).map((f) => (
+                            <option key={f} value={f}>
+                                {pointLabels[f]}
                             </option>
                         ))}
                     </select>
@@ -249,7 +255,7 @@ function App() {
 
                 <dt>
                     <label htmlFor="scale">
-                        Показывать каждую {showOnlyNPoint} точку {}
+                        Показывать значение каждой {showOnlyNPoint} точки
                     </label>
                 </dt>
                 <dd>
@@ -286,7 +292,6 @@ function App() {
             </div>
 
             <div>
-                {/* <Canvas lines={linesTest} polygons={polygonsTest} /> */}
                 <Canvas
                     lines={lines}
                     polygons={polygons}
@@ -294,10 +299,9 @@ function App() {
                     segmentLength={segmentLength}
                     distributedLoad={distributedLoad}
                     showLoadDistribution={showLoadDistribution}
-                    showHeatmap={showHeatmap}
-                    // showColoredPoints={showColoredPoints}
                     showOnlyNPoint={showOnlyNPoint}
                     showValue={showValue}
+                    showPoint={showPoint}
                     startCalculation={startCalculation}
                     calculationTrigger={() => setStartCalculation(false)}
                 />

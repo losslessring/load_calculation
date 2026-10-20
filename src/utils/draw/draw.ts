@@ -68,21 +68,28 @@ export function drawColoredPointsFlat(
     ctx: CanvasRenderingContext2D,
     points: any[],
     pointSize: number = 4,
-    colorProperty: string
+    colorProperty: string,
+    lineWidth: number = 0,
+    lineColor: string = 'black'
 ) {
     ctx.save()
     const pointSizeShift = pointSize / 2
 
     points.forEach((point) => {
-        // console.log(point[colorProperty])
+        const x = point.x - pointSizeShift
+        const y = point.y - pointSizeShift
+        const width = pointSize
+        const height = pointSize
+
         //@ts-ignore
         ctx.fillStyle = point[colorProperty]
-        ctx.fillRect(
-            point.x - pointSizeShift,
-            point.y - pointSizeShift,
-            pointSize,
-            pointSize
-        )
+        ctx.fillRect(x, y, width, height)
+
+        ctx.strokeStyle = lineColor
+        if (lineWidth) {
+            ctx.lineWidth = lineWidth
+            ctx.strokeRect(x, y, width, height)
+        }
     })
 
     ctx.restore()
