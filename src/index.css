@@ -146,11 +146,38 @@ input[type="number"] {
 }
 
 
-
 .drawing-canvas {
  
   /* border:1px solid; */
   /* border-color: gainsboro; */
   margin: 1rem;
   /* background-color: #6b6375; */
+}
+
+.title {
+  margin-bottom: 0.5rem;
+}
+
+.instruction-button {
+  display: block;
+  width: max-content;
+  margin: 0 auto;
+  margin-bottom: 0.5rem;
+}
+
+img {
+  margin: 2rem;
+  /* max-width: 75%;  */
+  height: auto;
+}
+
+.text-instruction {
+  border: none;
+  outline: none;
+  max-width: 60%;
+  margin: 0 auto;
+}
+
+p {
+  margin: 0.75rem;
 }
