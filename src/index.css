@@ -155,20 +155,28 @@ input[type="number"] {
 }
 
 .title {
-  margin-bottom: 0.5rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 .instruction-button {
-  display: block;
-  width: max-content;
-  margin: 0 auto;
-  margin-bottom: 0.5rem;
+  all: unset;                /* wipes all default button styling */
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  color: rgb(105, 105, 105);
+  font: inherit;             /* inherit page font */
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-img {
+dialog img {
   margin: 2rem;
   /* max-width: 75%;  */
   height: auto;
+}
+
+dialog {
+  border: none;
 }
 
 .text-instruction {
@@ -176,8 +184,74 @@ img {
   outline: none;
   max-width: 60%;
   margin: 0 auto;
+
 }
 
-p {
-  margin: 0.75rem;
+
+
+.video-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;      /* centers children horizontally */
+  text-align: center;       /* centers text if it wraps */
+  gap: 8px;                 /* space between image and text */
+  /* text-decoration: none; */
+  color: #333;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.video-link img {
+  margin:0;
+  display: block;           /* removes inline gap below image */
+}
+
+.menu {
+  display: flex;             /* horizontal row */
+  flex-wrap: nowrap;         /* keep it horizontal */
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0.5rem;
+  /* background: #333; */
+  max-width: 95vw;
+  overflow-x: auto;          /* scroll instead of wrap on tiny screens */
+}
+
+.menu a {
+  display: block;
+  padding: 0.75rem 1.25rem;
+  color: rgb(122, 122, 122);
+  text-decoration: none;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.menu a:hover,
+.menu button:hover {
+  color: #555;
+}
+
+/* Hide scrollbar for a cleaner look */
+.menu::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smaller padding on phones, still horizontal */
+@media (max-width: 480px) {
+  .menu a {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+.logo {
+    height: 3.5rem;
+    width: auto;
+    object-fit: contain;
+    display: block;
 }

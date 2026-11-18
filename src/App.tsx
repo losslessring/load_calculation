@@ -126,22 +126,65 @@ function App() {
 
     return (
         <>
+            <ul className="menu">
+                <li>
+                    <a href="https://kela.pro/" target="_blank">
+                        <img
+                            className="logo"
+                            src="/images/logo/kela_soft_logo_002_small.png"
+                            alt="Kela logo"
+                        />
+                    </a>
+                </li>
+                <li>
+                    <a href="https://kela.pro/" target="_blank">
+                        О нас
+                    </a>
+                </li>
+                <li>
+                    <button
+                        className="instruction-button"
+                        onClick={() => setInstructionDialogOpen(true)}
+                    >
+                        Инструкция
+                    </button>
+                </li>
+                <li>
+                    <a href="#">Обратная связь</a>
+                </li>
+            </ul>
             <h4 className="title">
                 Приведение равномерно распределённой нагрузки на перекрытие
                 [кг/м2] <br />к линейным нагрузкам на балки [кг/м]
             </h4>
-            <button
+            {/* <button
                 className="instruction-button"
                 onClick={() => setInstructionDialogOpen(true)}
             >
                 Инструкция
-            </button>
+            </button> */}
 
             <dialog
                 ref={instructionDialogRef}
                 onClose={() => setInstructionDialogOpen(false)}
             >
+                <button onClick={() => setInstructionDialogOpen(false)}>
+                    Close
+                </button>
                 <div className="text-instruction">
+                    <a
+                        className="video-link"
+                        href="https://drive.google.com/file/d/1qzhlzoC12qHYXdbsBq6ExrheDPp5_IPc"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        <img
+                            src="/images/instruction/video_instruction.png"
+                            alt="Видеоинструкция"
+                            width="300"
+                        ></img>
+                        <span>Видеоинструкция</span>
+                    </a>
                     <h4 tabIndex={-1} autoFocus>
                         Инструкция
                     </h4>
@@ -242,19 +285,17 @@ function App() {
                         </strong>
                         , ординаты в [мм] или не отображать значения.
                     </p>
+                    <strong>Показать точки:</strong> Тепловая карта, Цвет балки,
+                    Не отображать
                     <p>
-                        <strong>Показать точки:</strong> Тепловая карта, Цвет
-                        балки, Не отображать
-                        <p>
-                            Показать точки с раскраской под тепловую карту -
-                            синий минимальные значения, красный - максимальные.
-                        </p>
-                        <p>
-                            Цвет балки - точки окрашены в цвет балки, к которой
-                            принадлежат.
-                        </p>
-                        <p>Не отображать точки.</p>
+                        Показать точки с раскраской под тепловую карту - синий
+                        минимальные значения, красный - максимальные.
                     </p>
+                    <p>
+                        Цвет балки - точки окрашены в цвет балки, к которой
+                        принадлежат.
+                    </p>
+                    <p>Не отображать точки.</p>
                     <p>
                         Показывать значение каждой [значение] точки - Если длина
                         сегмента слишком маленькая, то отображаемые значения
@@ -269,7 +310,6 @@ function App() {
                         src="/images/instruction/9_instruction_set_up.png"
                         alt="Установка расчетных значений"
                     />
-
                     <p>
                         Со значением масштаба, установленным в 4, и с другими
                         настройками по умолчанию, получим такой расчет.
@@ -278,6 +318,12 @@ function App() {
                         src="/images/instruction/10_instruction_result.png"
                         alt="Готовый расчет"
                     />
+                    <p>
+                        Расчет готов. Можно менять настройки для достижения
+                        лучших результатов. Для проектов с многими перекрытиями
+                        и большим количеством балок следует действовать
+                        аналогичным образом.
+                    </p>
                     <button onClick={() => setInstructionDialogOpen(false)}>
                         Close
                     </button>
