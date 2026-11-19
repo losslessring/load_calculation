@@ -142,7 +142,7 @@ function App() {
                     <a href="https://kela.pro/" target="_blank">
                         <img
                             className="logo"
-                            src="/images/logo/kela_soft_logo.jpg"
+                            src="/images/logo/kela_soft_logo.svg"
                             alt="Kela logo"
                         />
                     </a>
