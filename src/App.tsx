@@ -44,7 +44,10 @@ function App() {
     const [showPoint, setShowPoint] = useState<ShowPoint>(ShowPoint.Heatmap)
 
     const [isInstructionDialogOpen, setInstructionDialogOpen] = useState(false)
+    const [isFeedbackDialogOpen, setFeedbackDialogOpen] = useState(false)
+
     const instructionDialogRef = useRef<HTMLDialogElement>(null)
+    const feedbackDialogRef = useRef<HTMLDialogElement>(null)
 
     useEffect(() => {
         if (isInstructionDialogOpen) {
@@ -53,6 +56,14 @@ function App() {
             instructionDialogRef.current?.close()
         }
     }, [isInstructionDialogOpen])
+
+    useEffect(() => {
+        if (isFeedbackDialogOpen) {
+            feedbackDialogRef.current?.showModal()
+        } else {
+            feedbackDialogRef.current?.close()
+        }
+    }, [isFeedbackDialogOpen])
 
     const handleFileChange = async (e: any) => {
         const file = e.target.files[0]
@@ -150,20 +161,18 @@ function App() {
                     </button>
                 </li>
                 <li>
-                    <a href="#">Обратная связь</a>
+                    <button
+                        className="instruction-button"
+                        onClick={() => setFeedbackDialogOpen(true)}
+                    >
+                        Обратная связь
+                    </button>
                 </li>
             </ul>
             <h4 className="title">
                 Приведение равномерно распределённой нагрузки на перекрытие
                 [кг/м2] <br />к линейным нагрузкам на балки [кг/м]
             </h4>
-            {/* <button
-                className="instruction-button"
-                onClick={() => setInstructionDialogOpen(true)}
-            >
-                Инструкция
-            </button> */}
-
             <dialog
                 ref={instructionDialogRef}
                 onClose={() => setInstructionDialogOpen(false)}
@@ -325,6 +334,45 @@ function App() {
                         аналогичным образом.
                     </p>
                     <button onClick={() => setInstructionDialogOpen(false)}>
+                        Close
+                    </button>
+                </div>
+            </dialog>
+            <dialog
+                ref={feedbackDialogRef}
+                onClose={() => setFeedbackDialogOpen(false)}
+            >
+                <div className="feedback">
+                    <a
+                        href="https://https://t.me/+I4v_FehHksQzMWFi"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <div>Группа Telegram по общим вопросам</div>
+                    </a>
+                    <a
+                        href="https://t.me/+Jz_bp66aeutiYWUy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <div>Группа Telegram для сообщений об ошибках</div>
+                    </a>
+                    <div>
+                        <p>Группы также можно найти через поиск Telegram</p>
+                        <p>load_calculation</p>
+                        <p>load_calculation_report</p>
+                    </div>
+                    <div>
+                        <a
+                            href="https://github.com/losslessring/load_calculation"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <div>Исходный код проекта</div>
+                        </a>
+                    </div>
+
+                    <button onClick={() => setFeedbackDialogOpen(false)}>
                         Close
                     </button>
                 </div>
