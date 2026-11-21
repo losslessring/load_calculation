@@ -45,9 +45,15 @@ function App() {
 
     const [isInstructionDialogOpen, setInstructionDialogOpen] = useState(false)
     const [isFeedbackDialogOpen, setFeedbackDialogOpen] = useState(false)
+    const [isLinksDialogOpen, setLinksDialogOpen] = useState(false)
+
+    const [fileName, setFileName] = useState<string>('Файл не выбран')
 
     const instructionDialogRef = useRef<HTMLDialogElement>(null)
     const feedbackDialogRef = useRef<HTMLDialogElement>(null)
+    const linksDialogRef = useRef<HTMLDialogElement>(null)
+
+    const inputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         if (isInstructionDialogOpen) {
@@ -65,8 +71,19 @@ function App() {
         }
     }, [isFeedbackDialogOpen])
 
+    useEffect(() => {
+        if (isLinksDialogOpen) {
+            linksDialogRef.current?.showModal()
+        } else {
+            linksDialogRef.current?.close()
+        }
+    }, [isLinksDialogOpen])
+
     const handleFileChange = async (e: any) => {
         const file = e.target.files[0]
+
+        setFileName(file ? file.name : 'Файл не выбран')
+
         const fileData = await file.text()
 
         const parser = new DxfParser()
@@ -166,6 +183,14 @@ function App() {
                         onClick={() => setFeedbackDialogOpen(true)}
                     >
                         Обратная связь
+                    </button>
+                </li>
+                <li>
+                    <button
+                        className="instruction-button"
+                        onClick={() => setLinksDialogOpen(true)}
+                    >
+                        Ссылки
                     </button>
                 </li>
             </ul>
@@ -377,16 +402,50 @@ function App() {
                     </button>
                 </div>
             </dialog>
-            <div>
-                <input
-                    type="file"
-                    onChange={handleFileChange}
-                    // className="file-input"
-                    id="file"
-                />
-                {/* <label htmlFor="file" className="file-label">
+            <dialog
+                ref={linksDialogRef}
+                onClose={() => setLinksDialogOpen(false)}
+            >
+                <div className="feedback">
+                    <div>
+                        <a
+                            href="https://github.com/losslessring/load_calculation"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <div>Исходный код проекта</div>
+                        </a>
+                    </div>
+                    <div>
+                        <a
+                            href="https://drive.google.com/file/d/1d-hXpR1mxw-EI-UP_17CYPXEVqkMg36x/view?usp=sharing"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <div>Тестовый файл</div>
+                        </a>
+                    </div>
+
+                    <button onClick={() => setLinksDialogOpen(false)}>
+                        Close
+                    </button>
+                </div>
+            </dialog>
+            <div className="file-row">
+                <button
+                    type="button"
+                    className="file-label"
+                    onClick={() => inputRef.current?.click()}
+                >
                     Загрузить файл
-                </label> */}
+                </button>
+                <input
+                    ref={inputRef}
+                    type="file"
+                    className="file-input"
+                    onChange={handleFileChange}
+                />
+                <span className="file-name">{fileName}</span>
             </div>
             <dl className="controls">
                 <dt>

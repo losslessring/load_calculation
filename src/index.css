@@ -295,7 +295,11 @@ button {
   line-height: 1.2;
 }
 
-
+/* .file-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+} */
 
 .file-input {
   position: absolute;
@@ -311,6 +315,7 @@ button {
   border: 2px solid #9ca3af;
   border-radius: 8px;
   color: #4b5563;
+  background-color:white;
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
