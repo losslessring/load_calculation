@@ -369,7 +369,7 @@ function App() {
             >
                 <div className="feedback">
                     <a
-                        href="https://https://t.me/+I4v_FehHksQzMWFi"
+                        href="https://t.me/+I4v_FehHksQzMWFi"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
@@ -387,16 +387,6 @@ function App() {
                         <p>load_calculation</p>
                         <p>load_calculation_report</p>
                     </div>
-                    <div>
-                        <a
-                            href="https://github.com/losslessring/load_calculation"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <div>Исходный код проекта</div>
-                        </a>
-                    </div>
-
                     <button onClick={() => setFeedbackDialogOpen(false)}>
                         Close
                     </button>
