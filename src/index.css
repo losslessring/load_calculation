@@ -142,8 +142,17 @@ input[type="number"] {
 }
 
 .calculate-button {
-  width: 100px
+  width: 100px;
+  background: #6b7280;
+  color: #fff;
 }
+
+
+/* .calculate-button:hover {
+  background: #515151; 
+  color: #fff;
+  border-color: #6b7280;
+} */
 
 
 .drawing-canvas {
@@ -155,8 +164,8 @@ input[type="number"] {
 }
 
 .title {
-  margin-top: 0;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .instruction-button {
@@ -269,3 +278,49 @@ dialog {
     object-fit: contain;
     display: block;
 }
+
+button {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  line-height: 1.2;
+}
+
+
+
+.file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.file-label {
+  display: inline-block;
+  padding: 0.5rem;
+  border: 2px solid #9ca3af;
+  border-radius: 8px;
+  color: #4b5563;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  /* transition: all 0.2s ease; */
+  margin: 1rem;
+}
+
+/* .file-label:hover {
+  background: #6b7280;
+  color: #fff;
+  border-color: #6b7280;
+} */
+

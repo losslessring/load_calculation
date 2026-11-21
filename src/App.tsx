@@ -378,7 +378,15 @@ function App() {
                 </div>
             </dialog>
             <div>
-                <input type="file" onChange={handleFileChange} />
+                <input
+                    type="file"
+                    onChange={handleFileChange}
+                    // className="file-input"
+                    id="file"
+                />
+                {/* <label htmlFor="file" className="file-label">
+                    Загрузить файл
+                </label> */}
             </div>
             <dl className="controls">
                 <dt>
